@@ -5,6 +5,7 @@ using UnityEngine;
 public class Character : MovementController
 {
     [SerializeField] protected float health = 100;
+    [SerializeField] protected SpawnData bulletSpawnData;
 
     public virtual void Hurt(float damage)
     {
@@ -12,6 +13,14 @@ public class Character : MovementController
         if (health <= 0)
         {
             Die();
+        }
+    }
+
+    protected virtual void Shoot()
+    {
+        if (bulletSpawnData)
+        {
+            ObjectPoolManager.Instance.InitializeObject(bulletSpawnData, transform.position);
         }
     }
 
