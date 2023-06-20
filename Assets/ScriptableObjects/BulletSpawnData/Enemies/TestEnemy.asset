@@ -10,7 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d7b1674deeb9994c98591be5daf225d, type: 3}
-  m_Name: MarinePrimary
+  m_Name: TestEnemy
   m_EditorClassIdentifier: 
-  controller: {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
+  prefab: {fileID: 6875824188617897490, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
   spawnOffset: {x: 0, y: 0}
+  targetPlayer: 1
+  fireRate: 5

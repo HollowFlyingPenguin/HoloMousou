@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 6875824188617897490}
   - component: {fileID: 6571704694543893927}
   - component: {fileID: 6482426748429104621}
-  m_Layer: 6
-  m_Name: MarinePrimary
+  m_Layer: 8
+  m_Name: EnemyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,11 +73,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1272242343
-  m_SortingLayer: 1
+  m_SortingLayerID: -1833289525
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.36320752, b: 0.39604566, a: 0.7607843}
+  m_Color: {r: 1, g: 0, b: 0.049382687, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -101,8 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   active: 1
-  speed: 18
-  movementDirection: {x: 0, y: 1}
+  speed: 10
+  movementDirection: {x: 0, y: 0}
+  faceMoveDir: 1
 --- !u!114 &6571704694543893927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d5e71b833e4da4a9d000698afbc821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnHit: 1
+  destroyOnHit: 0
   damage: 1
 --- !u!70 &6482426748429104621
 CapsuleCollider2D:
@@ -150,5 +151,5 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.7357767, y: 0.9113296}
   m_Direction: 0

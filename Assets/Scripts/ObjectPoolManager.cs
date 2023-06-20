@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -24,9 +25,9 @@ public class ObjectPoolManager : MonoBehaviour
         _instance = this;
     }
 
-    private void CreateObjectPool(MovementController controller)
+    private void CreateObjectPool(SpawnData spawnData)
     {
-        string poolName = controller.name;
+        string poolName = spawnData.prefab.name;
         if (!objectPools.ContainsKey(poolName))
         {
             objectPools[poolName] = new Queue<MovementController>();
@@ -44,42 +45,43 @@ public class ObjectPoolManager : MonoBehaviour
     {
         GameObject obj = controller.gameObject;
         obj.transform.position = pos + spawnData.spawnOffset;
+        if (spawnData.targetPlayer)
+        {
+            controller.SetMovementDirection(GameManager.Instance.GetPlayerPosition());
+        }
         obj.SetActive(true);
     }
 
     public MovementController InitializeObject(SpawnData spawnData, Vector2 pos)
     {
-        MovementController prefab = spawnData.controller;
+        MovementController prefab = spawnData.prefab;
         string poolName = prefab.name;
-        if (objectPools.ContainsKey(poolName))
+        if (!objectPools.ContainsKey(poolName))
         {
-            if (objectPools[poolName].Count > 0)
-            {
-                MovementController obj = objectPools[poolName].Dequeue();
-                ActivateObject(obj, spawnData, pos);
-                return obj;
-            }
-            else
-            {
-                MovementController newObj = Instantiate(prefab, transform);
-                ActivateObject(newObj, spawnData, pos);
-                return newObj;
-            }
+            CreateObjectPool(spawnData);
+        }
+        if (objectPools[poolName].Count > 0)
+        {
+            MovementController obj = objectPools[poolName].Dequeue();
+            ActivateObject(obj, spawnData, pos);
+            return obj;
         }
         else
         {
-            CreateObjectPool(prefab);
-            return InitializeObject(spawnData, pos);
+            MovementController newObj = Instantiate(prefab, transform);
+            newObj.name = poolName;
+            ActivateObject(newObj, spawnData, pos);
+            return newObj;
         }
     }
 
-    public void ReturnObjectToPool(MovementController controller)
+    public void ReturnObjectToPool(MovementController obj)
     {
-        string poolName = controller.name;
+        string poolName = obj.name;
         if (objectPools.ContainsKey(poolName))
         {
-            controller.gameObject.SetActive(false);
-            objectPools[poolName].Enqueue(controller);
+            obj.gameObject.SetActive(false);
+            objectPools[poolName].Enqueue(obj);
         }
         else
         {

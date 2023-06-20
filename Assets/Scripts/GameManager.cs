@@ -29,6 +29,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public Vector2 GetPlayerPosition()
+    {
+        return player.transform.position;
+    }
+
     public void Hit(Character character, float damage)
     {
         character.Hurt(damage);

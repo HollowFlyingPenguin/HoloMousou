@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
+    [SerializeField] protected bool destroyOnHit = false;
     [SerializeField] protected float damage = 1;
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        Character c = collision.transform.root.GetComponent<Character>();
-        if (c)
+        MovementController controller = GetComponentInParent<MovementController>();
+        Character hitChara = collision.GetComponentInParent<Character>();
+        Debug.Log("Hit " + hitChara.name);
+        if (hitChara && controller)
         {
-            Debug.Log("damage");
-            GameManager.Instance.Hit(c, damage);
+            GameManager.Instance.Hit(hitChara, damage);
+            if (destroyOnHit)
+            {
+                ObjectPoolManager.Instance.ReturnObjectToPool(controller);
+            }
         }
     }
 }
