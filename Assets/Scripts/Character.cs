@@ -1,54 +1,94 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Character : MovementController
 {
     [SerializeField] protected float health = 100;
     [SerializeField] protected SpawnData bulletSpawnData;
-    protected float shotTimer = 0;
-    protected bool canShoot = true;
+    protected List<float> shotTimerList = new();
+    protected bool canShoot = true, damageable = true;
 
-    protected virtual void FixedUpdate()
+    protected override void Start()
     {
+        base.Start();
         if (bulletSpawnData)
         {
-            CheckShotTimer();
+            for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
+            {
+                shotTimerList.Add(0);
+            }
         }
     }
 
-    protected virtual void CheckShotTimer()
+    protected override void FixedUpdate()
     {
-        var delay = 1f / bulletSpawnData.fireRate;
-        if (shotTimer < delay)
+        base.FixedUpdate();
+        if (bulletSpawnData)
         {
-            shotTimer += Time.fixedDeltaTime;
+            for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
+            {
+                CheckShotTimer(i);
+            }
+        }
+    }
+
+    protected virtual void CheckShotTimer(int index)
+    {
+        IndividualSpawnData data = bulletSpawnData.autoSpawnArray[index];
+        float fireRate = data.fireRate;
+        float timer = shotTimerList[index];
+        float delay = 1f / fireRate;
+        if (timer < delay)
+        {
+            timer += Time.fixedDeltaTime;
         }
         else
         {
-            shotTimer = delay;
+            timer = delay;
         }
 
-        if (shotTimer >= delay && canShoot)
+        if (timer >= delay && canShoot)
         {
-            Shoot();
-            shotTimer -= delay;
+            Shoot(data);
+            timer -= delay;
         }
+        shotTimerList[index] = timer;
     }
 
     public virtual void Hurt(float damage)
     {
-        health -= damage;
-        if (health <= 0)
+        if (damageable)
         {
-            Die();
+            health -= damage;
+            if (health <= 0)
+            {
+                Die();
+            }
         }
     }
 
-    protected virtual void Shoot()
+    protected virtual void Shoot(IndividualSpawnData data)
     {
-        if (bulletSpawnData)
+        var bullet = ObjectPoolManager.Instance.InitializeObject(data, transform.position);
+        bullet.ResetValues();
+        GameObject obj = bullet.gameObject;
+
+        obj.transform.position = (Vector2) transform.position + data.spawnOffset;
+
+        float angle = 0;
+        //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+
+        if (data.targetPlayer)
         {
-            ObjectPoolManager.Instance.InitializeObject(bulletSpawnData, transform.position);
+            angle = GameManager.Instance.AngleToPlayer(transform.position);
         }
+        angle += data.angleOffset + Random.Range(-data.randomAngleOffset / 2, data.randomAngleOffset / 2);
+        angle += data.spinRate * Time.time;
+        //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward) * Quaternion.Euler(0, 0, spinSpeed * Time.time);
+
+        bullet.SetMovementDirection(angle);
+        obj.SetActive(true);
     }
 
     protected virtual void Die()

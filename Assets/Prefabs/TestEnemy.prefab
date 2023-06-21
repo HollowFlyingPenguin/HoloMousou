@@ -34,7 +34,7 @@ Transform:
   - {fileID: 6563495330632904048}
   - {fileID: 4123694028509362753}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7707074642413383094
 SpriteRenderer:
@@ -104,8 +104,9 @@ MonoBehaviour:
   active: 1
   speed: 0
   movementDirection: {x: 0, y: 0}
+  faceMoveDir: 0
   health: 100
-  bulletSpawnData: {fileID: 0}
+  bulletSpawnData: {fileID: 11400000, guid: e5185ef560f0ecc41bee65aef0e55b29, type: 2}
 --- !u!50 &2739217101319735045
 Rigidbody2D:
   serializedVersion: 4
@@ -181,7 +182,7 @@ BoxCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -223,6 +224,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d5e71b833e4da4a9d000698afbc821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyOnHit: 0
   damage: 1
 --- !u!1 &3121975070013415770
 GameObject:

@@ -12,7 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d7b1674deeb9994c98591be5daf225d, type: 3}
   m_Name: TestEnemy
   m_EditorClassIdentifier: 
-  prefab: {fileID: 6875824188617897490, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
-  spawnOffset: {x: 0, y: 0}
-  targetPlayer: 1
-  fireRate: 5
+  autoSpawnArray:
+  - prefab: {fileID: 6875824188617897490, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
+    spawnOffset: {x: 0, y: 0}
+    targetPlayer: 0
+    angleOffset: 0
+    randomAngleOffset: 1
+    fireRate: 5
+    spinRate: 50
+  - prefab: {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
+    spawnOffset: {x: 0, y: 0}
+    targetPlayer: 1
+    angleOffset: -10
+    randomAngleOffset: 0
+    fireRate: 1
+    spinRate: 0
+  - prefab: {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
+    spawnOffset: {x: 0, y: 0}
+    targetPlayer: 1
+    angleOffset: 10
+    randomAngleOffset: 0
+    fireRate: 1
+    spinRate: 0

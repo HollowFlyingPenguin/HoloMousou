@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    [SerializeField] private bool drawGizmos = true;
+    [SerializeField] private GameObject GameAreaCenter;
     [SerializeField] private RectTransform gameAreaTransform;
     private float minGameX, maxGameX, minGameY, maxGameY;
 
@@ -16,6 +18,23 @@ public class UIManager : MonoBehaviour
                 Debug.Log("UIManager is Null");
             }
             return _instance;
+        }
+    }
+
+    [ExecuteInEditMode]
+    private void OnDrawGizmos()
+    {
+        if (drawGizmos)
+        {
+            SetAreaData();
+            Gizmos.color = Color.white;
+            var center = GetGameCenter();
+            var size = GetGameSize();
+            Gizmos.DrawWireCube(center, size);
+            if (GameAreaCenter)
+            {
+                GameAreaCenter.transform.position = center;
+            }
         }
     }
 
@@ -39,6 +58,20 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("World Corner " + i + " : " + v[i]);
         }
+    }
+
+    public Vector2 GetGameCenter()
+    {
+        var x = (maxGameX - minGameX) / 2 + minGameX;
+        var y = (maxGameY - minGameY) / 2 + minGameY;
+        return new Vector2(x, y);
+    }
+
+    public Vector2 GetGameSize()
+    {
+        var x = maxGameX - minGameX;
+        var y = maxGameY - minGameY;
+        return new Vector2(x, y);
     }
 
     private void SetAreaData()

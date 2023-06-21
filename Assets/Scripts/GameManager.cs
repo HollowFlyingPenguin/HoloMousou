@@ -34,6 +34,13 @@ public class GameManager : MonoBehaviour
         return player.transform.position;
     }
 
+    public float AngleToPlayer(Vector2 pos)
+    {
+        Vector2 distance = (Vector2) player.transform.position - pos;
+        var angle = Mathf.Atan2(distance.y, distance.x) * Mathf.Rad2Deg;
+        return angle;
+    }
+
     public void Hit(Character character, float damage)
     {
         character.Hurt(damage);

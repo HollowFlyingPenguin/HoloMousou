@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public enum ObjectType
 {
@@ -12,15 +14,23 @@ public class MovementController : MonoBehaviour
 {
     [SerializeField] protected ObjectType type;
     [SerializeField] protected bool active = true;
-    [SerializeField] protected float speed = 0;
-    [SerializeField] protected Vector2 movementDirection = new(0, 0);
-    [SerializeField] protected bool faceMoveDir = false;
+    [SerializeField] protected float baseSpeed = 0, acceleration = 0, speedMin = 0, speedMax = 100;
+    [SerializeField] protected bool faceMoveDir = true;
+    [SerializeField] protected float initialRotation = 0, rotationSpeed = 0;
+    [SerializeField] List<TimedEvent> timedEvents;
 
-    protected const float BoundCheckFreq = 1, BulletBoundCheckOffset = 0, EnemyBoundCheckOffset = 0;
-    protected float boundCheckTimer = 0;
+    protected Vector2 movementDirection = new(0, 0);
+    protected const float BoundCheckFreq = 1, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1;
+    protected float speed = 0, boundCheckTimer = 0;
 
     protected virtual void Awake()
     {
+    }
+
+    protected virtual void Start()
+    {
+        speed = baseSpeed;
+        StartEventTimers();
     }
 
     protected virtual void Update()
@@ -33,6 +43,37 @@ public class MovementController : MonoBehaviour
             boundCheckTimer = 0;
             CheckBounds();
         }
+    }
+
+    protected virtual void FixedUpdate()
+    {
+        if (acceleration != 0)
+        {
+            speed += acceleration * Time.deltaTime;
+            Mathf.Clamp(speed, speedMin, speedMax);
+        }
+        if (rotationSpeed != 0)
+        {
+            if (faceMoveDir)
+            {
+                Debug.LogWarning("faceMoveDir and rotationSpeed are on");
+            }
+            transform.rotation = Quaternion.Euler(0, 0, initialRotation + rotationSpeed * Time.time);
+        }
+    }
+
+    protected virtual void StartEventTimers()
+    {
+        foreach (var eventData in timedEvents)
+        {
+            Invoke(eventData.methodName, eventData.delay);
+        }
+    }
+
+    public virtual void ResetValues()
+    {
+        speed = baseSpeed;
+        transform.rotation = Quaternion.Euler(0, 0, initialRotation);
     }
 
     protected virtual void CheckBounds()
@@ -70,5 +111,10 @@ public class MovementController : MonoBehaviour
     public virtual void SetMovementDirection(Vector2 target)
     {
         movementDirection = target - (Vector2)transform.position;
+    }
+
+    public virtual void SetMovementDirection(float angle)
+    {
+        movementDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
     }
 }

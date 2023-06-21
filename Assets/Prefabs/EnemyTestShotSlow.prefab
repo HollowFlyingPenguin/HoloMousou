@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6571704694543893927}
   - component: {fileID: 6482426748429104621}
   m_Layer: 8
-  m_Name: EnemyBullet
+  m_Name: EnemyTestShotSlow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,8 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   active: 1
-  speed: 10
-  movementDirection: {x: 0, y: 0}
+  baseSpeed: 5
+  acceleration: 20
+  speedMin: 0
+  speedMax: 100
   faceMoveDir: 1
 --- !u!114 &6571704694543893927
 MonoBehaviour:

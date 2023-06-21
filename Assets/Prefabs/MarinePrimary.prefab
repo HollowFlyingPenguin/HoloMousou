@@ -101,8 +101,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   type: 0
   active: 1
-  speed: 18
-  movementDirection: {x: 0, y: 1}
+  baseSpeed: 20
+  acceleration: 0
+  speedMin: 0
+  speedMax: 100
+  faceMoveDir: 0
+  initialRotation: 0
+  rotationSpeed: 0
+  timedEvents: []
 --- !u!114 &6571704694543893927
 MonoBehaviour:
   m_ObjectHideFlags: 0

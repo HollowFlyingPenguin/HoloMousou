@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEditor;
+using UnityEngine;
 
 public class ObjectPoolManager : MonoBehaviour
 {
@@ -25,7 +24,7 @@ public class ObjectPoolManager : MonoBehaviour
         _instance = this;
     }
 
-    private void CreateObjectPool(SpawnData spawnData)
+    private void CreateObjectPool(IndividualSpawnData spawnData)
     {
         string poolName = spawnData.prefab.name;
         if (!objectPools.ContainsKey(poolName))
@@ -41,18 +40,25 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    private void ActivateObject(MovementController controller, SpawnData spawnData, Vector2 pos)
-    {
-        GameObject obj = controller.gameObject;
-        obj.transform.position = pos + spawnData.spawnOffset;
-        if (spawnData.targetPlayer)
-        {
-            controller.SetMovementDirection(GameManager.Instance.GetPlayerPosition());
-        }
-        obj.SetActive(true);
-    }
+    //private void ActivateObject(MovementController controller, IndividualSpawnData spawnData, Vector2 pos)
+    //{
+    //    controller.ResetValues();
+    //    GameObject obj = controller.gameObject;
+    //    obj.transform.position = pos + spawnData.spawnOffset;
 
-    public MovementController InitializeObject(SpawnData spawnData, Vector2 pos)
+    //    float angle = 0;
+    //    transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
+
+    //    if (spawnData.targetPlayer)
+    //    {
+    //        angle = GameManager.Instance.AngleToPlayer(pos);
+    //    }
+    //    angle += spawnData.angleOffset + Random.Range(-spawnData.randomAngleOffset / 2, spawnData.randomAngleOffset / 2);
+    //    controller.SetMovementDirection(angle);
+    //    obj.SetActive(true);
+    //}
+
+    public MovementController InitializeObject(IndividualSpawnData spawnData, Vector2 pos)
     {
         MovementController prefab = spawnData.prefab;
         string poolName = prefab.name;
@@ -63,14 +69,12 @@ public class ObjectPoolManager : MonoBehaviour
         if (objectPools[poolName].Count > 0)
         {
             MovementController obj = objectPools[poolName].Dequeue();
-            ActivateObject(obj, spawnData, pos);
             return obj;
         }
         else
         {
             MovementController newObj = Instantiate(prefab, transform);
             newObj.name = poolName;
-            ActivateObject(newObj, spawnData, pos);
             return newObj;
         }
     }
