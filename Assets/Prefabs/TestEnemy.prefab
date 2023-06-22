@@ -100,11 +100,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 484f11c83d38cdc47b74d5f49785a6af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 1
+  objectType: 0
   active: 1
-  speed: 0
-  movementDirection: {x: 0, y: 0}
+  destroyOnAttack: 0
+  baseSpeed: 0
+  acceleration: 0
+  speedMin: 0
+  speedMax: 100
   faceMoveDir: 0
+  initialRotation: 0
+  rotationSpeed: 0
+  playerTrackTurnSpeed: 0
+  timedEvents: []
   health: 100
   bulletSpawnData: {fileID: 11400000, guid: e5185ef560f0ecc41bee65aef0e55b29, type: 2}
 --- !u!50 &2739217101319735045
@@ -224,7 +231,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d5e71b833e4da4a9d000698afbc821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnHit: 0
   damage: 1
 --- !u!1 &3121975070013415770
 GameObject:

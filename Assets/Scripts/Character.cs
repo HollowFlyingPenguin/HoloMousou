@@ -6,7 +6,9 @@ public class Character : MovementController
 {
     [SerializeField] protected float health = 100;
     [SerializeField] protected SpawnData bulletSpawnData;
-    protected List<float> shotTimerList = new();
+    protected List<float> bulletTimerList = new();
+    protected int bulletPrefabIndex = 0;
+    protected float spawnTime;
     protected bool canShoot = true, damageable = true;
 
     protected override void Start()
@@ -16,7 +18,7 @@ public class Character : MovementController
         {
             for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
             {
-                shotTimerList.Add(0);
+                bulletTimerList.Add(0);
             }
         }
     }
@@ -37,7 +39,7 @@ public class Character : MovementController
     {
         IndividualSpawnData data = bulletSpawnData.autoSpawnArray[index];
         float fireRate = data.fireRate;
-        float timer = shotTimerList[index];
+        float timer = bulletTimerList[index];
         float delay = 1f / fireRate;
         if (timer < delay)
         {
@@ -53,7 +55,7 @@ public class Character : MovementController
             Shoot(data);
             timer -= delay;
         }
-        shotTimerList[index] = timer;
+        bulletTimerList[index] = timer;
     }
 
     public virtual void Hurt(float damage)
@@ -70,25 +72,61 @@ public class Character : MovementController
 
     protected virtual void Shoot(IndividualSpawnData data)
     {
-        var bullet = ObjectPoolManager.Instance.InitializeObject(data, transform.position);
-        bullet.ResetValues();
-        GameObject obj = bullet.gameObject;
-
-        obj.transform.position = (Vector2) transform.position + data.spawnOffset;
-
-        float angle = 0;
-        //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
-
-        if (data.targetPlayer)
+        for (int i = 0; i < data.bulletCount; i++)
         {
-            angle = GameManager.Instance.AngleToPlayer(transform.position);
-        }
-        angle += data.angleOffset + Random.Range(-data.randomAngleOffset / 2, data.randomAngleOffset / 2);
-        angle += data.spinRate * Time.time;
-        //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward) * Quaternion.Euler(0, 0, spinSpeed * Time.time);
+            int arrayLength = data.prefabs.Length;
+            if (arrayLength == 0)
+            {
+                Debug.LogWarning("No bullet in shoot for " + name);
+                return;
+            }
+            MovementController prefab = data.prefabs[bulletPrefabIndex % arrayLength];
+            bulletPrefabIndex++;
 
-        bullet.SetMovementDirection(angle);
-        obj.SetActive(true);
+            MovementController bullet = ObjectPoolManager.Instance.InitializeObject(prefab);
+
+            bullet.ResetValues();
+            GameObject obj = bullet.gameObject;
+            obj.transform.position = (Vector2)transform.position + data.spawnOffset;
+
+            float angle = 0;
+
+            if (data.targetPlayer)
+            {
+                angle = GameManager.Instance.AngleToPlayer(transform.position);
+            }
+            angle += data.angleOffset + Random.Range(-data.randomAngleOffset / 2, data.randomAngleOffset / 2);
+
+            // Spin calculations
+            var spinRate = data.spinRate;
+            spinRate += data.spinAccel * (Time.time - spawnTime);
+            spinRate = Mathf.Clamp(spinRate, data.spinMin, data.spinMax);
+            spinRate = data.reverseSpin ? -spinRate : spinRate;
+            angle += spinRate * (Time.time - spawnTime);
+
+            if (data.bulletCount > 1)
+            {
+                if (data.autoSpace)
+                {
+                    angle += i * 360 / data.bulletCount;
+                }
+                else
+                {
+                    angle += (i * data.bulletSpread / data.bulletCount) - (data.bulletSpread / data.bulletCount);
+                }
+            }
+
+            bullet.SetMovementDirection(angle);
+            //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward) * Quaternion.Euler(0, 0, spinSpeed * Time.time);
+            obj.SetActive(true);
+        }
+    }
+
+    public override void ResetValues()
+    {
+        base.ResetValues();
+        bulletPrefabIndex = 0;
+        spawnTime = Time.time;
     }
 
     protected virtual void Die()

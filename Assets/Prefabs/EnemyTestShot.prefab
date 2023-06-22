@@ -99,14 +99,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 743d3c562d319eb4081e123448fd8308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  objectType: 0
   active: 1
-  baseSpeed: 5
+  destroyOnAttack: 1
+  baseSpeed: 1
   acceleration: 0
   speedMin: 0
   speedMax: 100
   faceMoveDir: 0
+  initialRotation: 0
   rotationSpeed: 50
+  playerTrackTurnSpeed: 0
+  timedEvents: []
 --- !u!114 &6571704694543893927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -119,7 +123,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5d5e71b833e4da4a9d000698afbc821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyOnHit: 0
   damage: 1
 --- !u!70 &6482426748429104621
 CapsuleCollider2D:

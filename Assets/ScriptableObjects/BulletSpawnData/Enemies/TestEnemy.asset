@@ -13,24 +13,33 @@ MonoBehaviour:
   m_Name: TestEnemy
   m_EditorClassIdentifier: 
   autoSpawnArray:
-  - prefab: {fileID: 6875824188617897490, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
+  - prefabs:
+    - {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
+    spawnOffset: {x: 0, y: 0}
+    targetPlayer: 1
+    bulletCount: 3
+    autoSpace: 1
+    bulletSpread: 0
+    angleOffset: 0
+    randomAngleOffset: 0
+    fireRate: 10
+    reverseSpin: 0
+    spinRate: 0
+    spinAccel: 30
+    spinMin: 0
+    spinMax: 100
+  - prefabs:
+    - {fileID: 6875824188617897490, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
     spawnOffset: {x: 0, y: 0}
     targetPlayer: 0
-    angleOffset: 0
-    randomAngleOffset: 1
-    fireRate: 5
-    spinRate: 50
-  - prefab: {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
-    spawnOffset: {x: 0, y: 0}
-    targetPlayer: 1
-    angleOffset: -10
+    bulletCount: 5
+    autoSpace: 0
+    bulletSpread: 10
+    angleOffset: -90
     randomAngleOffset: 0
-    fireRate: 1
-    spinRate: 0
-  - prefab: {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
-    spawnOffset: {x: 0, y: 0}
-    targetPlayer: 1
-    angleOffset: 10
-    randomAngleOffset: 0
-    fireRate: 1
-    spinRate: 0
+    fireRate: 3
+    reverseSpin: 0
+    spinRate: 30
+    spinAccel: 0
+    spinMin: 0
+    spinMax: 100

@@ -2,20 +2,28 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    [SerializeField] protected bool destroyOnHit = false;
     [SerializeField] protected float damage = 1;
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
         MovementController controller = GetComponentInParent<MovementController>();
         Character hitChara = collision.GetComponentInParent<Character>();
-        Debug.Log("Hit " + hitChara.name);
         if (hitChara && controller)
         {
-            GameManager.Instance.Hit(hitChara, damage);
-            if (destroyOnHit)
+            int hitLayer = collision.gameObject.layer;
+            ObjectType objectType = controller.GetObjectType();
+            if (hitLayer == LayerMask.NameToLayer("GrazeHurtbox") && objectType.Equals(ObjectType.Bullet) && !controller.GetGrazed())
             {
-                ObjectPoolManager.Instance.ReturnObjectToPool(controller);
+                Debug.Log("Graze ");
+                controller.SetGrazed(true);
+            }
+            else
+            {
+                GameManager.Instance.Hit(hitChara, damage);
+                if (controller.GetDestroyOnAttack())
+                {
+                    ObjectPoolManager.Instance.ReturnObjectToPool(controller);
+                }
             }
         }
     }

@@ -108,7 +108,9 @@ MonoBehaviour:
   faceMoveDir: 0
   initialRotation: 0
   rotationSpeed: 0
+  playerTrackTurnSpeed: 0
   timedEvents: []
+  movementDirection: {x: 0, y: 0}
 --- !u!114 &6571704694543893927
 MonoBehaviour:
   m_ObjectHideFlags: 0

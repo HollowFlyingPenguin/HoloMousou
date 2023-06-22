@@ -29,9 +29,24 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+        // Fixes an issue where controllers don't call ResetValue on game start which effects Timers and speed.
+        MovementController[] initialControllers = FindObjectsByType<MovementController>(FindObjectsSortMode.None);
+        foreach (var controller in initialControllers)
+        {
+            controller.ResetValues();
+        }
+    }
+
     public Vector2 GetPlayerPosition()
     {
         return player.transform.position;
+    }
+
+    public Vector2 VectorToPlayer(Vector2 pos)
+    {
+        return (Vector2) player.transform.position - pos;
     }
 
     public float AngleToPlayer(Vector2 pos)

@@ -13,15 +13,27 @@ MonoBehaviour:
   m_Name: MarinePrimary
   m_EditorClassIdentifier: 
   autoSpawnArray:
-  - prefab: {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
+  - prefabs:
+    - {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
     spawnOffset: {x: -0.1, y: 0.5}
     targetPlayer: 0
+    bulletCount: 1
+    autoSpace: 0
+    bulletSpread: 0
     angleOffset: 90
     randomAngleOffset: 0
     fireRate: 5
-  - prefab: {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
+    reverseSpin: 0
+    spinRate: 0
+  - prefabs:
+    - {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
     spawnOffset: {x: 0.1, y: 0.5}
     targetPlayer: 0
+    bulletCount: 1
+    autoSpace: 0
+    bulletSpread: 0
     angleOffset: 90
     randomAngleOffset: 0
     fireRate: 5
+    reverseSpin: 0
+    spinRate: 0

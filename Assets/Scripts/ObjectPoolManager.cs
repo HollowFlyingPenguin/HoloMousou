@@ -24,9 +24,9 @@ public class ObjectPoolManager : MonoBehaviour
         _instance = this;
     }
 
-    private void CreateObjectPool(IndividualSpawnData spawnData)
+    private void CreateObjectPool(MovementController prefab)
     {
-        string poolName = spawnData.prefab.name;
+        string poolName = prefab.name;
         if (!objectPools.ContainsKey(poolName))
         {
             objectPools[poolName] = new Queue<MovementController>();
@@ -40,31 +40,12 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    //private void ActivateObject(MovementController controller, IndividualSpawnData spawnData, Vector2 pos)
-    //{
-    //    controller.ResetValues();
-    //    GameObject obj = controller.gameObject;
-    //    obj.transform.position = pos + spawnData.spawnOffset;
-
-    //    float angle = 0;
-    //    transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward);
-
-    //    if (spawnData.targetPlayer)
-    //    {
-    //        angle = GameManager.Instance.AngleToPlayer(pos);
-    //    }
-    //    angle += spawnData.angleOffset + Random.Range(-spawnData.randomAngleOffset / 2, spawnData.randomAngleOffset / 2);
-    //    controller.SetMovementDirection(angle);
-    //    obj.SetActive(true);
-    //}
-
-    public MovementController InitializeObject(IndividualSpawnData spawnData, Vector2 pos)
+    public MovementController InitializeObject(MovementController prefab)
     {
-        MovementController prefab = spawnData.prefab;
         string poolName = prefab.name;
         if (!objectPools.ContainsKey(poolName))
         {
-            CreateObjectPool(spawnData);
+            CreateObjectPool(prefab);
         }
         if (objectPools[poolName].Count > 0)
         {

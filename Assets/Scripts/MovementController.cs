@@ -12,16 +12,20 @@ public enum ObjectType
 
 public class MovementController : MonoBehaviour
 {
-    [SerializeField] protected ObjectType type;
+    [SerializeField] protected ObjectType objectType;
     [SerializeField] protected bool active = true;
+    [SerializeField] protected bool destroyOnAttack = true;
     [SerializeField] protected float baseSpeed = 0, acceleration = 0, speedMin = 0, speedMax = 100;
     [SerializeField] protected bool faceMoveDir = true;
     [SerializeField] protected float initialRotation = 0, rotationSpeed = 0;
+    [SerializeField] protected float playerTrackTurnSpeed = 0;
+    
     [SerializeField] List<TimedEvent> timedEvents;
 
     protected Vector2 movementDirection = new(0, 0);
-    protected const float BoundCheckFreq = 1, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1;
+    protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f;
     protected float speed = 0, boundCheckTimer = 0;
+    protected bool grazed = false;
 
     protected virtual void Awake()
     {
@@ -29,8 +33,6 @@ public class MovementController : MonoBehaviour
 
     protected virtual void Start()
     {
-        speed = baseSpeed;
-        StartEventTimers();
     }
 
     protected virtual void Update()
@@ -56,36 +58,49 @@ public class MovementController : MonoBehaviour
         {
             if (faceMoveDir)
             {
-                Debug.LogWarning("faceMoveDir and rotationSpeed are on");
+                Debug.LogWarning("faceMoveDir and rotationSpeed are on " + name);
             }
             transform.rotation = Quaternion.Euler(0, 0, initialRotation + rotationSpeed * Time.time);
         }
+    }
+    protected virtual void OnDisable()
+    {
+        CancelInvoke();
     }
 
     protected virtual void StartEventTimers()
     {
         foreach (var eventData in timedEvents)
         {
-            Invoke(eventData.methodName, eventData.delay);
+            if (eventData.autoRepeat)
+            {
+                InvokeRepeating(eventData.methodName, eventData.delay, eventData.repeatRate);
+            }
+            else
+            {
+                Invoke(eventData.methodName, eventData.delay);
+            }
         }
     }
 
     public virtual void ResetValues()
     {
+        StartEventTimers();
         speed = baseSpeed;
         transform.rotation = Quaternion.Euler(0, 0, initialRotation);
+        grazed = false;
     }
 
     protected virtual void CheckBounds()
     {
-        if (type == ObjectType.Bullet)
+        if (objectType == ObjectType.Bullet)
         {
             if (!UIManager.Instance.CheckInGameBounds(transform.position, BulletBoundCheckOffset))
             {
                 ObjectPoolManager.Instance.ReturnObjectToPool(this);
             }
         }
-        else if (type == ObjectType.Enemy)
+        else if (objectType == ObjectType.Enemy)
         {
             if (!UIManager.Instance.CheckInGameBounds(transform.position, EnemyBoundCheckOffset))
             {
@@ -98,6 +113,17 @@ public class MovementController : MonoBehaviour
     {
         if (active)
         {
+            movementDirection = movementDirection.normalized;
+            if (playerTrackTurnSpeed != 0)
+            {
+                var vectorToPlayer = GameManager.Instance.VectorToPlayer(transform.position);
+                vectorToPlayer = vectorToPlayer.normalized;
+                movementDirection = Vector2.Lerp(movementDirection, vectorToPlayer, playerTrackTurnSpeed * Time.deltaTime);
+                if (!UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
+                {
+                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                }
+            }
             var velocity = movementDirection.normalized * speed;
             gameObject.transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.deltaTime;
             if (faceMoveDir)
@@ -116,5 +142,30 @@ public class MovementController : MonoBehaviour
     public virtual void SetMovementDirection(float angle)
     {
         movementDirection = Quaternion.Euler(0f, 0f, angle) * Vector2.right;
+    }
+
+    public virtual void SetGrazed(bool isGrazed)
+    {
+        grazed = isGrazed;
+    }
+
+    public virtual bool GetGrazed()
+    {
+        return grazed;
+    }
+
+    public virtual bool GetDestroyOnAttack()
+    {
+        return destroyOnAttack;
+    }
+
+    public virtual ObjectType GetObjectType()
+    {
+        return objectType;
+    }
+
+    public virtual void EventTest()
+    {
+        Debug.Log("Test");
     }
 }
