@@ -16,7 +16,7 @@ TagManager:
   - EnemyHitbox
   - EnemyHurtbox
   - GrazeHurtbox
-  - 
+  - Pickups
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Enemy
     uniqueID: 4152103699
+    locked: 0
+  - name: Pickups
+    uniqueID: 1834769651
     locked: 0
   - name: EnemyShots
     uniqueID: 2461677771

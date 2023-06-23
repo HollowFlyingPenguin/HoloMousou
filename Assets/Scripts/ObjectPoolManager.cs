@@ -63,14 +63,14 @@ public class ObjectPoolManager : MonoBehaviour
     public void ReturnObjectToPool(MovementController obj)
     {
         string poolName = obj.name;
+        if (!objectPools.ContainsKey(poolName))
+        {
+            CreateObjectPool(obj);
+        }
         if (objectPools.ContainsKey(poolName))
         {
             obj.gameObject.SetActive(false);
             objectPools[poolName].Enqueue(obj);
-        }
-        else
-        {
-            Debug.LogWarning("Cannot return object to pool. Pool for " + poolName + " does not exist.");
         }
     }
 }

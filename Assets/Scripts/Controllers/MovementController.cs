@@ -1,13 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
+/// <summary>
+/// The class for anything that requires movement (mainly bullets). Inherited by player and enemies.
+/// </summary>
 public enum ObjectType
 {
     Bullet,
     Enemy,
     Boss,
     Player,
+    Pickup
 }
 
 public class MovementController : MonoBehaviour
@@ -19,11 +22,11 @@ public class MovementController : MonoBehaviour
     [SerializeField] protected bool faceMoveDir = true;
     [SerializeField] protected float initialRotation = 0, rotationSpeed = 0;
     [SerializeField] protected float playerTrackTurnSpeed = 0;
-    
-    [SerializeField] List<TimedEvent> timedEvents;
+
+    [SerializeField] private List<TimedEvent> timedEvents;
 
     protected Vector2 movementDirection = new(0, 0);
-    protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f;
+    protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f, PickupBoundCheckOffset = 0.5f;
     protected float speed = 0, boundCheckTimer = 0;
     protected bool grazed = false;
 
@@ -52,8 +55,19 @@ public class MovementController : MonoBehaviour
         if (acceleration != 0)
         {
             speed += acceleration * Time.deltaTime;
-            Mathf.Clamp(speed, speedMin, speedMax);
+            speed = Mathf.Clamp(speed, speedMin, speedMax);
         }
+        //else if (acceleration < 0)
+        //{
+        //    speed += acceleration * Time.deltaTime;
+        //    Mathf.Clamp(speed, speedMin, speedMax);
+        //    if (speed < 0)
+        //    {
+        //        acceleration *= -1;
+        //        speed *= -1;
+        //        movementDirection *= -1;
+        //    }
+        //}
         if (rotationSpeed != 0)
         {
             if (faceMoveDir)
@@ -63,6 +77,7 @@ public class MovementController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, initialRotation + rotationSpeed * Time.time);
         }
     }
+
     protected virtual void OnDisable()
     {
         CancelInvoke();
@@ -93,19 +108,26 @@ public class MovementController : MonoBehaviour
 
     protected virtual void CheckBounds()
     {
-        if (objectType == ObjectType.Bullet)
+        switch (objectType)
         {
-            if (!UIManager.Instance.CheckInGameBounds(transform.position, BulletBoundCheckOffset))
-            {
-                ObjectPoolManager.Instance.ReturnObjectToPool(this);
-            }
-        }
-        else if (objectType == ObjectType.Enemy)
-        {
-            if (!UIManager.Instance.CheckInGameBounds(transform.position, EnemyBoundCheckOffset))
-            {
-                ObjectPoolManager.Instance.ReturnObjectToPool(this);
-            }
+            case ObjectType.Bullet:
+                if (!UIManager.Instance.CheckInGameBounds(transform.position, BulletBoundCheckOffset))
+                {
+                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                }
+                break;
+            case ObjectType.Enemy:
+                if (!UIManager.Instance.CheckInGameBounds(transform.position, EnemyBoundCheckOffset))
+                {
+                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                }
+                break;
+            case ObjectType.Pickup:
+                if (transform.position.y < UIManager.Instance.GetMinGameY() - PickupBoundCheckOffset)
+                {
+                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                }
+                break;
         }
     }
 
@@ -118,13 +140,19 @@ public class MovementController : MonoBehaviour
             {
                 var vectorToPlayer = GameManager.Instance.VectorToPlayer(transform.position);
                 vectorToPlayer = vectorToPlayer.normalized;
+                if (speed < 0)
+                {
+                    vectorToPlayer *= -1;
+                }
+                //var moveAddition = vectorToPlayer.normalized * playerTrackTurnSpeed;
+                //gameObject.transform.position += new Vector3(moveAddition.x, moveAddition.y, 0) * Time.deltaTime;
                 movementDirection = Vector2.Lerp(movementDirection, vectorToPlayer, playerTrackTurnSpeed * Time.deltaTime);
-                if (!UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
+                if (objectType == ObjectType.Bullet && !UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
                 {
                     ObjectPoolManager.Instance.ReturnObjectToPool(this);
                 }
             }
-            var velocity = movementDirection.normalized * speed;
+            var velocity = movementDirection * speed;
             gameObject.transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.deltaTime;
             if (faceMoveDir)
             {

@@ -1,11 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// The class for any object that takes damage or shoots bullets. Used by damageable bullets and things that spawn bullets. Inherited by player and enemies.
+/// </summary>
 public class Character : MovementController
 {
     [SerializeField] protected float health = 100;
     [SerializeField] protected SpawnData bulletSpawnData;
+    [SerializeField] protected PickupSpawnData pickupSpawnData;
     protected List<float> bulletTimerList = new();
     protected int bulletPrefabIndex = 0;
     protected float spawnTime;
@@ -131,6 +134,10 @@ public class Character : MovementController
 
     protected virtual void Die()
     {
-        Debug.Log("Dead");
+        if (pickupSpawnData)
+        {
+            GameManager.Instance.SpawnPickup(transform.position, pickupSpawnData);
+        }
+        ObjectPoolManager.Instance.ReturnObjectToPool(this);
     }
 }
