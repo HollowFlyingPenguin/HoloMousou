@@ -18,14 +18,15 @@ public class MovementController : MonoBehaviour
     [SerializeField] protected ObjectType objectType;
     [SerializeField] protected bool active = true;
     [SerializeField] protected bool destroyOnAttack = true;
-    [SerializeField] protected float baseSpeed = 0, acceleration = 0, speedMin = 0, speedMax = 100;
+    [SerializeField] protected float baseSpeed = 0, speedMax = 100;
+    [SerializeField] protected Vector2 accel = new(0, 0);
     [SerializeField] protected bool faceMoveDir = true;
     [SerializeField] protected float initialRotation = 0, rotationSpeed = 0;
     [SerializeField] protected float playerTrackTurnSpeed = 0;
 
     [SerializeField] private List<TimedEvent> timedEvents;
 
-    protected Vector2 movementDirection = new(0, 0);
+    [SerializeField] protected Vector2 movementDirection = new(0, 0);
     protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f, PickupBoundCheckOffset = 0.5f;
     protected float speed = 0, boundCheckTimer = 0;
     protected bool grazed = false;
@@ -52,22 +53,16 @@ public class MovementController : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if (acceleration != 0)
+        if (playerTrackTurnSpeed != 0)
         {
-            speed += acceleration * Time.deltaTime;
-            speed = Mathf.Clamp(speed, speedMin, speedMax);
+            var playerAccel = GameManager.Instance.VectorToPlayer(transform.position).normalized;
+            playerAccel *= playerTrackTurnSpeed;
+            AccelMovement(playerAccel);
         }
-        //else if (acceleration < 0)
-        //{
-        //    speed += acceleration * Time.deltaTime;
-        //    Mathf.Clamp(speed, speedMin, speedMax);
-        //    if (speed < 0)
-        //    {
-        //        acceleration *= -1;
-        //        speed *= -1;
-        //        movementDirection *= -1;
-        //    }
-        //}
+        else if (!Equals(accel, new Vector2(0, 0)))
+        {
+            AccelMovement(accel);
+        }
         if (rotationSpeed != 0)
         {
             if (faceMoveDir)
@@ -116,12 +111,14 @@ public class MovementController : MonoBehaviour
                     ObjectPoolManager.Instance.ReturnObjectToPool(this);
                 }
                 break;
+
             case ObjectType.Enemy:
                 if (!UIManager.Instance.CheckInGameBounds(transform.position, EnemyBoundCheckOffset))
                 {
                     ObjectPoolManager.Instance.ReturnObjectToPool(this);
                 }
                 break;
+
             case ObjectType.Pickup:
                 if (transform.position.y < UIManager.Instance.GetMinGameY() - PickupBoundCheckOffset)
                 {
@@ -136,21 +133,9 @@ public class MovementController : MonoBehaviour
         if (active)
         {
             movementDirection = movementDirection.normalized;
-            if (playerTrackTurnSpeed != 0)
+            if (playerTrackTurnSpeed != 0 && objectType == ObjectType.Bullet && !UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
             {
-                var vectorToPlayer = GameManager.Instance.VectorToPlayer(transform.position);
-                vectorToPlayer = vectorToPlayer.normalized;
-                if (speed < 0)
-                {
-                    vectorToPlayer *= -1;
-                }
-                //var moveAddition = vectorToPlayer.normalized * playerTrackTurnSpeed;
-                //gameObject.transform.position += new Vector3(moveAddition.x, moveAddition.y, 0) * Time.deltaTime;
-                movementDirection = Vector2.Lerp(movementDirection, vectorToPlayer, playerTrackTurnSpeed * Time.deltaTime);
-                if (objectType == ObjectType.Bullet && !UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
-                {
-                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
-                }
+                ObjectPoolManager.Instance.ReturnObjectToPool(this);
             }
             var velocity = movementDirection * speed;
             gameObject.transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.deltaTime;
@@ -190,6 +175,30 @@ public class MovementController : MonoBehaviour
     public virtual ObjectType GetObjectType()
     {
         return objectType;
+    }
+
+    private void AccelMovement(Vector2 accel)
+    {
+        Vector2 movement = GetMovementVector();
+        movement += accel * Time.deltaTime;
+        movement = ClampVector2(movement, speedMax);
+        speed = movement.magnitude;
+        movementDirection = movement.normalized;
+    }
+
+    private Vector2 GetMovementVector()
+    {
+        Vector2 dir = movementDirection.normalized;
+        var vector = dir * speed;
+        return vector;
+    }
+
+    private Vector2 ClampVector2(Vector2 vector, float max)
+    {
+        float magnitude = vector.magnitude;
+        float clampedMagnitude = Mathf.Clamp(magnitude, 0, max);
+        Vector2 clampedVector = vector.normalized * clampedMagnitude;
+        return clampedVector;
     }
 
     public virtual void EventTest()

@@ -7,6 +7,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] protected MovementController powerPrefab, scorePrefab, bigPowerPrefab, lifePrefab;
     // Distances for group pickup spawns
     [SerializeField] protected float minPickupDistance = 0, maxPickupDistance = 1;
+    [SerializeField] protected float power = 0, score = 0;
+    [SerializeField] protected float powerPickupValue = 1, bigPowerPickupValue = 10, scorePickupValue = 500;
+
+    public delegate void EnableAutoPickup();
+    public event EnableAutoPickup OnEnableAutoPickup;
+    public delegate void DisableAutoPickup();
+    public event DisableAutoPickup OnDisableAutoPickup;
+    public bool AutoPickup { get; private set; }
+
     protected Player player;
 
     private static GameManager _instance;
@@ -64,6 +73,35 @@ public class GameManager : MonoBehaviour
         character.Hurt(damage);
     }
 
+    public void PickupPower()
+    {
+        power += powerPickupValue;
+    }
+
+    public void PickupBigPower()
+    {
+        power += bigPowerPickupValue;
+    }
+
+    public void PickupScore()
+    {
+        power += scorePickupValue;
+    }
+
+    public void PickupLife()
+    {
+        power += scorePickupValue;
+    }
+
+    public void SetAutoPickup(bool autoPickup)
+    {
+        AutoPickup = autoPickup;
+        if (autoPickup)
+            OnEnableAutoPickup.Invoke();
+        else
+            OnDisableAutoPickup.Invoke();
+    }
+
     public void SpawnPickup(Vector2 centerPos, PickupSpawnData pickupSpawnData)
     {
         int totalCount = pickupSpawnData.powerCount + pickupSpawnData.scoreCount;
@@ -98,13 +136,15 @@ public class GameManager : MonoBehaviour
         if (pickupSpawnData.lifeCount == 1)
         {
             MovementController obj;
-            obj = ObjectPoolManager.Instance.InitializeObject(bigPowerPrefab);
+            obj = ObjectPoolManager.Instance.InitializeObject(lifePrefab);
+            obj.ResetValues();
             obj.transform.position = centerPos;
             lifeCount--;
         } else if (pickupSpawnData.bigPowerCount == 1)
         {
             MovementController obj;
             obj = ObjectPoolManager.Instance.InitializeObject(bigPowerPrefab);
+            obj.ResetValues();
             obj.transform.position = centerPos;
             bigPowerCount--;
         }

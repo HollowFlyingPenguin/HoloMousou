@@ -6,10 +6,9 @@ using UnityEngine.InputSystem;
 public class Player : Character
 {
     [SerializeField] protected float slowPercent = 0.3f, edgeBoundOffsetX = 0.5f, edgeBoundOffsetY = 0.5f;
-
-    protected PlayerInput input;
     [SerializeField] protected float recoverTime = 1;
     protected float recoverTimer = 0;
+    protected PlayerInput input;
 
     protected override void Awake()
     {
@@ -40,6 +39,11 @@ public class Player : Character
             StartCoroutine(InvincibilityTimer());
     }
 
+    protected override void Die()
+    {
+        Debug.Log("Player Dead");
+    }
+
     IEnumerator InvincibilityTimer()
     {
         damageable = false;
@@ -64,5 +68,10 @@ public class Player : Character
             );
             transform.position = position;
         }
+    }
+
+    protected virtual void GainLife()
+    {
+        health += 1;
     }
 }
