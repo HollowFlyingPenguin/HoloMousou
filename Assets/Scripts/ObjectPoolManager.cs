@@ -30,13 +30,6 @@ public class ObjectPoolManager : MonoBehaviour
         if (!objectPools.ContainsKey(poolName))
         {
             objectPools[poolName] = new Queue<MovementController>();
-
-            //for (int i = 0; i < initialPoolSize; i++)
-            //{
-            //    MovementController newObj = Instantiate(prefab);
-            //    newObj.SetActive(false);
-            //    objectPools[poolName].Enqueue(newObj);
-            //}
         }
     }
 

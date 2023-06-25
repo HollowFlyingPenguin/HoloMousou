@@ -41,6 +41,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         _instance = this;
+        SetAreaData();
     }
 
     private void Start()

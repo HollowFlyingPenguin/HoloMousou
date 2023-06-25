@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a7530089768b2d40b907b3a8faf9318, type: 3}
   m_Name: GroupTest
   m_EditorClassIdentifier: 
-  powerCount: 1
-  scoreCount: 1
-  bigPowerCount: 1
-  lifeCount: 0
+  powerCount: 2
+  scoreCount: 2
+  bigPowerCount: 2
+  lifeCount: 1

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5625263019284205527}
   - component: {fileID: 8688418209330733485}
   m_Layer: 0
-  m_Name: Player
+  m_Name: TestPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,17 +106,19 @@ MonoBehaviour:
   objectType: 0
   active: 1
   destroyOnAttack: 1
-  baseSpeed: 6
-  acceleration: 0
-  speedMin: 0
+  baseSpeed: 6.5
   speedMax: 0
+  accel: {x: 0, y: 0}
   faceMoveDir: 0
   initialRotation: 0
   rotationSpeed: 0
   playerTrackTurnSpeed: 0
   timedEvents: []
+  movementDirection: {x: 0, y: 0}
   health: 3
   bulletSpawnData: {fileID: 11400000, guid: 120f8f9d51c16474c98614856267d85a, type: 2}
+  pickupSpawnData: {fileID: 0}
+  pointOfCollectionRatio: 0.4
   slowPercent: 0.6
   edgeBoundOffsetX: -0.1
   edgeBoundOffsetY: -0.25
@@ -284,7 +286,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1536734167
-  m_SortingLayer: 5
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: c7f381483fb41f14e935b2d6d9fec62f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

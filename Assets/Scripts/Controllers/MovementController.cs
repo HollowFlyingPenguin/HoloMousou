@@ -177,7 +177,7 @@ public class MovementController : MonoBehaviour
         return objectType;
     }
 
-    private void AccelMovement(Vector2 accel)
+    protected virtual void AccelMovement(Vector2 accel)
     {
         Vector2 movement = GetMovementVector();
         movement += accel * Time.deltaTime;
@@ -186,14 +186,14 @@ public class MovementController : MonoBehaviour
         movementDirection = movement.normalized;
     }
 
-    private Vector2 GetMovementVector()
+    protected Vector2 GetMovementVector()
     {
         Vector2 dir = movementDirection.normalized;
         var vector = dir * speed;
         return vector;
     }
 
-    private Vector2 ClampVector2(Vector2 vector, float max)
+    protected Vector2 ClampVector2(Vector2 vector, float max)
     {
         float magnitude = vector.magnitude;
         float clampedMagnitude = Mathf.Clamp(magnitude, 0, max);

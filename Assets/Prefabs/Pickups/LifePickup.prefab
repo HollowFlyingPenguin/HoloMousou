@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5c6de2bb428bf42845d67d473b34ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  type: 3
 --- !u!114 &9090196900805012063
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
   active: 1
   destroyOnAttack: 1
   baseSpeed: 2
-  speedMax: 6
+  speedMax: 5
   accel: {x: 0, y: -5}
   faceMoveDir: 0
   initialRotation: 0

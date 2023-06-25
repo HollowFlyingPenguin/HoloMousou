@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   autoSpawnArray:
   - prefabs:
-    - {fileID: 6875824188617897490, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
+    - {fileID: 6875824188617897490, guid: f574aa4589432e849b2f95cce0525abf, type: 3}
     spawnOffset: {x: 0, y: 0}
     targetPlayer: 1
     bulletCount: 3

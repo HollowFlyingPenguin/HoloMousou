@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8165321884700148793}
   - component: {fileID: 7499606313929539534}
-  - component: {fileID: -7608738825740981866}
   - component: {fileID: -6706805352241659138}
+  - component: {fileID: -7608738825740981866}
   - component: {fileID: 508688536034451652}
   m_Layer: 11
   m_Name: ScorePickup
@@ -87,6 +87,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-6706805352241659138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5771656011058597323}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd5c6de2bb428bf42845d67d473b34ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
 --- !u!114 &-7608738825740981866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,7 +116,7 @@ MonoBehaviour:
   active: 1
   destroyOnAttack: 1
   baseSpeed: 2
-  speedMax: 6
+  speedMax: 5
   accel: {x: 0, y: -5}
   faceMoveDir: 0
   initialRotation: 0
@@ -111,19 +124,6 @@ MonoBehaviour:
   playerTrackTurnSpeed: 0
   timedEvents: []
   movementDirection: {x: 0, y: 0}
---- !u!114 &-6706805352241659138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5771656011058597323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd5c6de2bb428bf42845d67d473b34ce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 1
 --- !u!61 &508688536034451652
 BoxCollider2D:
   m_ObjectHideFlags: 0

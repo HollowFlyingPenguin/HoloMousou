@@ -116,7 +116,7 @@ MonoBehaviour:
   active: 1
   destroyOnAttack: 1
   baseSpeed: 2
-  speedMax: 6
+  speedMax: 5
   accel: {x: 0, y: -5}
   faceMoveDir: 0
   initialRotation: 0

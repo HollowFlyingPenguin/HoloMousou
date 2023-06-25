@@ -136,7 +136,7 @@ public class Character : MovementController
     {
         if (pickupSpawnData)
         {
-            GameManager.Instance.SpawnPickup(transform.position, pickupSpawnData);
+            SpawnManager.Instance.SpawnPickup(transform.position, pickupSpawnData);
         }
         ObjectPoolManager.Instance.ReturnObjectToPool(this);
     }

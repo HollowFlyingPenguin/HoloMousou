@@ -22,9 +22,12 @@ MonoBehaviour:
     bulletSpread: 0
     angleOffset: 90
     randomAngleOffset: 0
-    fireRate: 5
+    fireRate: 10
     reverseSpin: 0
     spinRate: 0
+    spinAccel: 0
+    spinMin: 0
+    spinMax: 100
   - prefabs:
     - {fileID: 6875824188617897490, guid: 2721c896c69c3ed468bd9de43adf3538, type: 3}
     spawnOffset: {x: 0.1, y: 0.5}
@@ -34,6 +37,9 @@ MonoBehaviour:
     bulletSpread: 0
     angleOffset: 90
     randomAngleOffset: 0
-    fireRate: 5
+    fireRate: 10
     reverseSpin: 0
     spinRate: 0
+    spinAccel: 0
+    spinMin: 0
+    spinMax: 100

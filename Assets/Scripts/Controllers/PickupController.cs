@@ -1,18 +1,22 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PickupController : MovementController
 {
+    protected Vector2 defaultAccel;
     protected bool autoPickup = false;
+    protected static float MinPickupSpeed = 4;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        defaultAccel = accel;
+    }
 
     protected override void Start()
     {
         base.Start();
-        SetMovementDirection(90);
-        autoPickup = GameManager.Instance.AutoPickup;
-        GameManager.Instance.OnEnableAutoPickup += () => autoPickup = true;
-        GameManager.Instance.OnDisableAutoPickup += () => autoPickup = false;
+        GameManager.Instance.EnableAutoPickup += () => autoPickup = true; 
+        GameManager.Instance.DisableAutoPickup += DisablePickup;
     }
 
     protected override void FixedUpdate()
@@ -20,12 +24,39 @@ public class PickupController : MovementController
         base.FixedUpdate();
         if (autoPickup)
         {
+            accel = GameManager.Instance.VectorToPlayer(transform.position).normalized * accel.magnitude;
             movementDirection = GameManager.Instance.VectorToPlayer(transform.position);
+            if (speed < MinPickupSpeed)
+            {
+                speed = MinPickupSpeed;
+            }
         }
     }
 
-    public void SetAutoPickup(bool autoPickup)
+    protected virtual void DisablePickup()
     {
-        this.autoPickup = autoPickup;
+        if (autoPickup)
+        {
+            ResetValues();
+            autoPickup = false;
+        }
+    }
+
+    public override void ResetValues()
+    {
+        base.ResetValues();
+        autoPickup = GameManager.Instance.AutoPickup;
+        SetMovementDirection(90);
+        accel = defaultAccel;
+    }
+
+    protected override void AccelMovement(Vector2 accel)
+    {
+        Vector2 movement = GetMovementVector();
+        movement += accel * Time.deltaTime;
+        if (!autoPickup)
+            movement = ClampVector2(movement, speedMax);
+        speed = movement.magnitude;
+        movementDirection = movement.normalized;
     }
 }
