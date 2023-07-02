@@ -4,8 +4,10 @@ public class UIManager : MonoBehaviour
 {
     [SerializeField] private bool drawGizmos = true;
     [SerializeField] private GameObject GameAreaCenter;
-    [SerializeField] private RectTransform gameAreaTransform;
+    [SerializeField] private RectTransform gameAreaTransform, bombMeter;
+    [SerializeField] private RectTransform breakpoint1, breakpoint2, bombFill;
     private float minGameX, maxGameX, minGameY, maxGameY;
+    private float minBombY, maxBombY, bombHeight, bombX;
 
     private static UIManager _instance;
 
@@ -47,6 +49,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         SetAreaData();
+        SetBombData();
     }
 
     public void GetGameCorners()
@@ -87,6 +90,25 @@ public class UIManager : MonoBehaviour
         minGameY = min.y;
         maxGameX = max.x;
         maxGameY = max.y;
+    }
+
+    private void SetBombData()
+    {
+        Vector3[] corners = new Vector3[4];
+        bombMeter.GetWorldCorners(corners);
+        bombX = bombMeter.transform.position.x;
+        minBombY = corners[0].y;
+        maxBombY = corners[2].y;
+        bombHeight = maxBombY - minBombY;
+        breakpoint1.transform.position = new Vector2(bombX, minBombY + GameManager.Instance.BombBreakPoint1 * bombHeight);
+        breakpoint2.transform.position = new Vector2(bombX, minBombY + GameManager.Instance.BombBreakPoint2 * bombHeight);
+    }
+
+    public void SetFillMeter(float percent)
+    {
+        Rect rect = bombFill.rect;
+        rect.height = percent * bombHeight;
+        bombFill.sizeDelta = new Vector2(rect.width, rect.height);
     }
 
     public bool CheckInGameBounds(Vector2 pos, float offset)

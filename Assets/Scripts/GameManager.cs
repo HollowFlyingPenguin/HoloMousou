@@ -6,7 +6,17 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] protected float power = 0, score = 0;
-    [SerializeField] protected float powerPickupValue = 1, bigPowerPickupValue = 10, scorePickupValue = 500;
+    [SerializeField] protected float powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100;
+    [SerializeField] protected float bombBreakPoint1 = 0.5f, bombBreakPoint2 = 0.75f;
+
+    public float BombBreakPoint1
+    {
+        get { return bombBreakPoint1; }
+    }
+    public float BombBreakPoint2
+    {
+        get { return bombBreakPoint2; }
+    }
 
     //public delegate void EnableAutoPickup();
     //public event EnableAutoPickup OnEnableAutoPickup;
@@ -92,7 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void PickupLife()
     {
-        power += scorePickupValue;
+        player.GainLife();
     }
 
     public void SetAutoPickup(bool autoPickup)

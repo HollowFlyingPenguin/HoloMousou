@@ -170,7 +170,7 @@ public class Player : Character
         }
     }
 
-    protected virtual void GainLife()
+    public virtual void GainLife()
     {
         health += 1;
     }
