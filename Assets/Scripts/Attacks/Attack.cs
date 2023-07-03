@@ -14,17 +14,22 @@ public class Attack : MonoBehaviour
             ObjectType objectType = controller.GetObjectType();
             if (hitLayer == LayerMask.NameToLayer("GrazeHurtbox") && objectType.Equals(ObjectType.Bullet) && !controller.GetGrazed())
             {
-                Debug.Log("Graze ");
+                GameManager.Instance.Graze();
                 controller.SetGrazed(true);
             }
             else
             {
-                GameManager.Instance.Hit(hitChara, damage);
+                OnHit(hitChara);
                 if (controller.GetDestroyOnAttack())
                 {
                     ObjectPoolManager.Instance.ReturnObjectToPool(controller);
                 }
             }
         }
+    }
+
+    protected virtual void OnHit(Character hitChara)
+    {
+        GameManager.Instance.Hit(hitChara, damage);
     }
 }

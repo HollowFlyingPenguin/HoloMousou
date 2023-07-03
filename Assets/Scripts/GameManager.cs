@@ -5,17 +5,18 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] protected float power = 0, score = 0;
-    [SerializeField] protected float powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100;
-    [SerializeField] protected float bombBreakPoint1 = 0.5f, bombBreakPoint2 = 0.75f;
+    protected int power = 0, score = 0, highscore = 0;
+    [SerializeField] protected int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100, grazeScoreValue = 100, playerDamageScoreValue = 10;
+    [SerializeField] protected float bombBreakpoint1 = 0.5f, bombBreakpoint2 = 0.75f;
+    [SerializeField] protected int[] powerBreakpoints = new int[4];
 
     public float BombBreakPoint1
     {
-        get { return bombBreakPoint1; }
+        get { return bombBreakpoint1; }
     }
     public float BombBreakPoint2
     {
-        get { return bombBreakPoint2; }
+        get { return bombBreakpoint2; }
     }
 
     //public delegate void EnableAutoPickup();
@@ -56,6 +57,15 @@ public class GameManager : MonoBehaviour
         {
             controller.ResetValues();
         }
+        UpdatePower(0);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            PickupPower();
+        }
     }
 
     public void SetPlayer(Player player)
@@ -80,6 +90,12 @@ public class GameManager : MonoBehaviour
         return angle;
     }
 
+    public void PlayerDamage(float damage, ShotType shotType)
+    {
+        UpdateScore(playerDamageScoreValue);
+        // Increase score and Bomb
+    }
+
     public void Hit(Character character, float damage)
     {
         character.Hurt(damage);
@@ -87,22 +103,69 @@ public class GameManager : MonoBehaviour
 
     public void PickupPower()
     {
-        power += powerPickupValue;
+        UpdatePower(powerPickupValue);
     }
 
     public void PickupBigPower()
     {
-        power += bigPowerPickupValue;
+        UpdatePower(bigPowerPickupValue);
     }
 
     public void PickupScore()
     {
-        power += scorePickupValue;
+        UpdateScore(scorePickupValue);
     }
 
     public void PickupLife()
     {
         player.GainLife();
+    }
+
+    public void Graze()
+    {
+        UpdateScore(grazeScoreValue);
+    }
+
+    protected void UpdatePower(int value)
+    {
+        power += value;
+        power = Mathf.Clamp(power, 0, powerBreakpoints[^1]);
+        var breakpoint = CalculatePowerBreakpoint();
+        UIManager.Instance.UpdatePower(power, breakpoint);
+    }
+
+    protected int CalculatePowerBreakpoint()
+    {
+        int breakpoint = powerBreakpoints[0];
+        if (power >= breakpoint)
+        {
+            int maxPower = powerBreakpoints[^1];
+            if (power == maxPower)
+            {
+                breakpoint = maxPower;
+            }
+            else
+            {
+                int i = 1;
+                while (power >= powerBreakpoints[i])
+                {
+                    i++;
+                }
+                breakpoint = powerBreakpoints[i];
+            }
+        }
+        return breakpoint;
+    }
+
+    protected void UpdateScore(int value)
+    {
+        score += value;
+        UIManager.Instance.UpdateScore(score);
+        if (score > highscore)
+        {
+            highscore = score;
+            UIManager.Instance.UpdateHighscore(highscore);
+        }
     }
 
     public void SetAutoPickup(bool autoPickup)

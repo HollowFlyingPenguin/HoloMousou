@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -6,6 +7,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject GameAreaCenter;
     [SerializeField] private RectTransform gameAreaTransform, bombMeter;
     [SerializeField] private RectTransform breakpoint1, breakpoint2, bombFill;
+    [SerializeField] private TMP_Text powerText, highscoreText, scoreText;
     private float minGameX, maxGameX, minGameY, maxGameY;
     private float minBombY, maxBombY, bombHeight, bombX;
 
@@ -135,5 +137,20 @@ public class UIManager : MonoBehaviour
     public float GetMaxGameY()
     {
         return maxGameY;
+    }
+
+    public void UpdatePower(int power, int breakpoint)
+    {
+        powerText.text = "Power " + power + " / " + breakpoint;
+    }
+
+    public void UpdateScore(int score)
+    {
+        scoreText.text = score.ToString("N0");
+    }
+
+    public void UpdateHighscore(int highscore)
+    {
+        highscoreText.text = highscore.ToString("N0");
     }
 }
