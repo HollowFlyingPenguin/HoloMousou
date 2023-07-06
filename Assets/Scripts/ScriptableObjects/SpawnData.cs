@@ -13,8 +13,13 @@ public class IndividualSpawnData
 {
     public MovementController[] prefabs = new MovementController[1];
     public Vector2 spawnOffset;
+    public bool spawnAsChild = false;
     public bool targetPlayer = false;
     public float bulletCount = 1;
+
+    /// <summary>
+    /// Automatically spaces the bullets evenly from each other. Doesn't work with bulletSpread. RandomAngleOffset is applied afterwards. 
+    /// </summary>
     public bool autoSpace = false;
 
     /// <summary>

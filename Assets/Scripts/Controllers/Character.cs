@@ -83,14 +83,19 @@ public class Character : MovementController
                 Debug.LogWarning("No bullet in shoot for " + name);
                 return;
             }
+            // Used to alternate between different shots
             MovementController prefab = data.prefabs[bulletPrefabIndex % arrayLength];
             bulletPrefabIndex++;
 
             MovementController bullet = ObjectPoolManager.Instance.InitializeObject(prefab);
-
+            if (data.spawnAsChild)
+            {
+                bullet.transform.parent = transform;
+            }
             bullet.ResetValues();
             GameObject obj = bullet.gameObject;
             obj.transform.position = (Vector2)transform.position + data.spawnOffset;
+            bullet.SetOrigin(transform);
 
             float angle = 0;
 
@@ -120,7 +125,6 @@ public class Character : MovementController
             }
 
             bullet.SetMovementDirection(angle);
-            //obj.transform.rotation = Quaternion.AngleAxis(angle + 90, Vector3.forward) * Quaternion.Euler(0, 0, spinSpeed * Time.time);
             obj.SetActive(true);
         }
     }

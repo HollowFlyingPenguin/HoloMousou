@@ -1,3 +1,4 @@
+using PowerTools;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,13 +24,14 @@ public class MovementController : MonoBehaviour
     [SerializeField] protected bool faceMoveDir = true;
     [SerializeField] protected float initialRotation = 0, rotationSpeed = 0;
     [SerializeField] protected float playerTrackTurnSpeed = 0;
-
     [SerializeField] private List<TimedEvent> timedEvents;
-
     [SerializeField] protected Vector2 movementDirection = new(0, 0);
+
+    protected SpriteAnim spriteAnim;
     protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f, PickupBoundCheckOffset = 0.5f;
     protected float speed = 0, boundCheckTimer = 0;
     protected bool grazed = false;
+    protected Transform spawnOrigin;
 
     protected virtual void Awake()
     {
@@ -37,6 +39,7 @@ public class MovementController : MonoBehaviour
 
     protected virtual void Start()
     {
+        spriteAnim = GetComponent<SpriteAnim>();
     }
 
     protected virtual void Update()
@@ -147,6 +150,20 @@ public class MovementController : MonoBehaviour
         }
     }
 
+    protected virtual void AccelMovement(Vector2 accel)
+    {
+        Vector2 movement = GetMovementVector();
+        movement += accel * Time.deltaTime;
+        movement = ClampVector2(movement, speedMax);
+        speed = movement.magnitude;
+        movementDirection = movement.normalized;
+    }
+
+    public virtual void ReturnToPool()
+    {
+        ObjectPoolManager.Instance.ReturnObjectToPool(this);
+    }
+
     public virtual void SetMovementDirection(Vector2 target)
     {
         movementDirection = target - (Vector2)transform.position;
@@ -162,6 +179,11 @@ public class MovementController : MonoBehaviour
         grazed = isGrazed;
     }
 
+    public void SetOrigin(Transform transform)
+    {
+        spawnOrigin = transform;
+    }
+
     public virtual bool GetGrazed()
     {
         return grazed;
@@ -175,15 +197,6 @@ public class MovementController : MonoBehaviour
     public virtual ObjectType GetObjectType()
     {
         return objectType;
-    }
-
-    protected virtual void AccelMovement(Vector2 accel)
-    {
-        Vector2 movement = GetMovementVector();
-        movement += accel * Time.deltaTime;
-        movement = ClampVector2(movement, speedMax);
-        speed = movement.magnitude;
-        movementDirection = movement.normalized;
     }
 
     protected Vector2 GetMovementVector()

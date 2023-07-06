@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class Player : Character
 {
+    [SerializeField] protected SpawnData[] attacks = new SpawnData[4], bombs = new SpawnData[3];
+    [SerializeField] protected SpriteRenderer hurtBox;
     [SerializeField] protected float pointOfCollectionRatio = 0.4f;
     [SerializeField] protected float slowPercent = 0.3f, edgeBoundOffsetX = 0.5f, edgeBoundOffsetY = 0.5f;
     [SerializeField] protected float recoverTime = 1;
@@ -17,6 +19,10 @@ public class Player : Character
     {
         base.Awake();
         input = GetComponent<PlayerInput>();
+    }
+    protected override void Start()
+    {
+        base.Start();
     }
 
     protected override void FixedUpdate()
@@ -32,17 +38,22 @@ public class Player : Character
         base.Update();
 
         canShoot = input.actions["Shoot"].IsPressed();
-        bool justPressed = input.actions["Shoot"].WasPressedThisFrame();
-        if (justPressed)
+        bool shotPressed = input.actions["Shoot"].WasPressedThisFrame();
+        if (shotPressed)
         {
             for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
             {
                 CheckShotTimer(i);
             }
         }
-        // Debug
-        if (Input.GetKeyDown(KeyCode.H)) {
-            Hurt(1);
+        bool bombPressed = input.actions["Bomb"].WasPressedThisFrame();
+        if (bombPressed)
+        {
+            int bombStage = GameManager.Instance.GetBombStage();
+            if (bombStage > 0)
+            {
+                Shoot(bombs[bombStage - 1].autoSpawnArray[0]);
+            }
         }
     }
 
@@ -144,6 +155,7 @@ public class Player : Character
         {
             var velocity = movementDirection.normalized * speed;
             var isSlow = input.actions["Slow"].IsPressed();
+            hurtBox.enabled = isSlow;
             if (isSlow)
             {
                 velocity *= slowPercent;
@@ -173,5 +185,10 @@ public class Player : Character
     public virtual void GainLife()
     {
         health += 1;
+    }
+
+    public virtual void SetPowerUpgrade(int stage)
+    {
+        bulletSpawnData = attacks[stage];
     }
 }

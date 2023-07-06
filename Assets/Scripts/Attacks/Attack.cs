@@ -4,7 +4,7 @@ public class Attack : MonoBehaviour
 {
     [SerializeField] protected float damage = 1;
 
-    protected void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         MovementController controller = GetComponentInParent<MovementController>();
         Character hitChara = collision.GetComponentInParent<Character>();

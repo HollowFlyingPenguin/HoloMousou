@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
@@ -7,6 +8,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject GameAreaCenter;
     [SerializeField] private RectTransform gameAreaTransform, bombMeter;
     [SerializeField] private RectTransform breakpoint1, breakpoint2, bombFill;
+    [SerializeField] private Image bombFillImage;
+    [SerializeField] private Color[] bombMeterColors;
     [SerializeField] private TMP_Text powerText, highscoreText, scoreText;
     private float minGameX, maxGameX, minGameY, maxGameY;
     private float minBombY, maxBombY, bombHeight, bombX;
@@ -106,11 +109,12 @@ public class UIManager : MonoBehaviour
         breakpoint2.transform.position = new Vector2(bombX, minBombY + GameManager.Instance.BombBreakPoint2 * bombHeight);
     }
 
-    public void SetFillMeter(float percent)
+    public void SetBombFill(float percent, int bombStage)
     {
         Rect rect = bombFill.rect;
         rect.height = percent * bombHeight;
         bombFill.sizeDelta = new Vector2(rect.width, rect.height);
+        bombFillImage.color = bombMeterColors[bombStage];
     }
 
     public bool CheckInGameBounds(Vector2 pos, float offset)

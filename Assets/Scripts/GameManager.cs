@@ -1,19 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    protected int power = 0, score = 0, highscore = 0;
-    [SerializeField] protected int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100, grazeScoreValue = 100, playerDamageScoreValue = 10;
-    [SerializeField] protected float bombBreakpoint1 = 0.5f, bombBreakpoint2 = 0.75f;
+    protected int power = 0, powerStage = 0, score = 0, highscore = 0, bombStage = 0;
+    [SerializeField] protected int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100, grazeScoreValue = 100, damageScoreValue = 10;
+    [SerializeField] protected float bombBreakpoint1 = 0.5f, bombBreakpoint2 = 0.75f, damageBombValue = 0.01f;
     [SerializeField] protected int[] powerBreakpoints = new int[4];
+    protected float bombMeter = 0;
 
     public float BombBreakPoint1
     {
         get { return bombBreakpoint1; }
     }
+
     public float BombBreakPoint2
     {
         get { return bombBreakpoint2; }
@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     //public event DisableAutoPickup OnDisableAutoPickup;
 
     public event UnityAction EnableAutoPickup;
+
     public event UnityAction DisableAutoPickup;
 
     public bool AutoPickup { get; private set; } = false;
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
     protected Player player;
 
     private static GameManager _instance;
+
     public static GameManager Instance //Singleton Stuff
     {
         get
@@ -62,9 +64,18 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        // Debug functions
         if (Input.GetKeyDown(KeyCode.P))
         {
             PickupPower();
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            player.Hurt(1);
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            UpdateBomb(0.2f);
         }
     }
 
@@ -73,27 +84,13 @@ public class GameManager : MonoBehaviour
         this.player = player;
     }
 
-    public Vector2 GetPlayerPosition()
-    {
-        return player.transform.position;
-    }
-
-    public Vector2 VectorToPlayer(Vector2 pos)
-    {
-        return (Vector2) player.transform.position - pos;
-    }
-
-    public float AngleToPlayer(Vector2 pos)
-    {
-        Vector2 distance = (Vector2) player.transform.position - pos;
-        var angle = Mathf.Atan2(distance.y, distance.x) * Mathf.Rad2Deg;
-        return angle;
-    }
-
     public void PlayerDamage(float damage, ShotType shotType)
     {
-        UpdateScore(playerDamageScoreValue);
-        // Increase score and Bomb
+        UpdateScore(damageScoreValue);
+        if (shotType == ShotType.Basic)
+        {
+            UpdateBomb(damageBombValue);
+        }
     }
 
     public void Hit(Character character, float damage)
@@ -120,6 +117,22 @@ public class GameManager : MonoBehaviour
     {
         player.GainLife();
     }
+    public Vector2 GetPlayerPosition()
+    {
+        return player.transform.position;
+    }
+
+    public Vector2 VectorToPlayer(Vector2 pos)
+    {
+        return (Vector2)player.transform.position - pos;
+    }
+
+    public float AngleToPlayer(Vector2 pos)
+    {
+        Vector2 distance = (Vector2)player.transform.position - pos;
+        var angle = Mathf.Atan2(distance.y, distance.x) * Mathf.Rad2Deg;
+        return angle;
+    }
 
     public void Graze()
     {
@@ -130,19 +143,22 @@ public class GameManager : MonoBehaviour
     {
         power += value;
         power = Mathf.Clamp(power, 0, powerBreakpoints[^1]);
-        var breakpoint = CalculatePowerBreakpoint();
+        CalculatePowerBreakpoint(out int breakpoint);
+        player.SetPowerUpgrade(powerStage);
         UIManager.Instance.UpdatePower(power, breakpoint);
     }
 
-    protected int CalculatePowerBreakpoint()
+    protected void CalculatePowerBreakpoint(out int breakpoint)
     {
-        int breakpoint = powerBreakpoints[0];
+        breakpoint = powerBreakpoints[0];
+        powerStage = 0;
         if (power >= breakpoint)
         {
             int maxPower = powerBreakpoints[^1];
             if (power == maxPower)
             {
                 breakpoint = maxPower;
+                powerStage = powerBreakpoints.Length - 1;
             }
             else
             {
@@ -152,9 +168,9 @@ public class GameManager : MonoBehaviour
                     i++;
                 }
                 breakpoint = powerBreakpoints[i];
+                powerStage = 1;
             }
         }
-        return breakpoint;
     }
 
     protected void UpdateScore(int value)
@@ -165,6 +181,34 @@ public class GameManager : MonoBehaviour
         {
             highscore = score;
             UIManager.Instance.UpdateHighscore(highscore);
+        }
+    }
+
+    protected void UpdateBomb(float value)
+    {
+        bombMeter += value;
+        bombMeter = Mathf.Clamp(bombMeter, 0, 1);
+        CalculateBombStage();
+        UIManager.Instance.SetBombFill(bombMeter, bombStage);
+    }
+
+    protected void CalculateBombStage()
+    {
+        bombStage = 0;
+
+        if (bombMeter >= BombBreakPoint1 && bombMeter < bombBreakpoint2)
+        {
+            bombStage = 1;
+        }
+
+        if (bombMeter > bombBreakpoint2 && bombMeter < 1)
+        {
+            bombStage = 2;
+        }
+
+        if (bombMeter >= 1)
+        {
+            bombStage = 3;
         }
     }
 
@@ -184,5 +228,10 @@ public class GameManager : MonoBehaviour
     public void ResetPickupMovement()
     {
         DisableAutoPickup?.Invoke();
+    }
+
+    public int GetBombStage()
+    {
+        return bombStage;
     }
 }

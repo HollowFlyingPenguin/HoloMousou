@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 671487108918501229}
   - component: {fileID: 5864932889875494676}
-  - component: {fileID: 6875824188617897490}
+  - component: {fileID: 684207032059709398}
   - component: {fileID: 6571704694543893927}
   - component: {fileID: 6482426748429104621}
   m_Layer: 8
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1833289525
-  m_SortingLayer: 4
+  m_SortingLayer: 6
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0, b: 0.049382687, a: 1}
@@ -87,7 +87,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &6875824188617897490
+--- !u!114 &684207032059709398
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,21 +96,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8922634500759155638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743d3c562d319eb4081e123448fd8308, type: 3}
+  m_Script: {fileID: 11500000, guid: 9f31ec1cd2476da41b1f939bbf58c98f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   objectType: 0
   active: 1
   destroyOnAttack: 1
   baseSpeed: 1
-  acceleration: 0
-  speedMin: 0
   speedMax: 100
+  accel: {x: 0, y: 0}
   faceMoveDir: 0
   initialRotation: 0
   rotationSpeed: 50
   playerTrackTurnSpeed: 0
   timedEvents: []
+  movementDirection: {x: 0, y: 0}
 --- !u!114 &6571704694543893927
 MonoBehaviour:
   m_ObjectHideFlags: 0

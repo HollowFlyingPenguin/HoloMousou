@@ -4,7 +4,7 @@ public class PickupController : MovementController
 {
     protected Vector2 defaultAccel;
     protected bool autoPickup = false;
-    protected static float MinPickupSpeed = 4;
+    protected static float MinPickupSpeed = 5;
 
     protected override void Awake()
     {

@@ -10,36 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d7b1674deeb9994c98591be5daf225d, type: 3}
-  m_Name: TestEnemy
+  m_Name: ma_b_a_1
   m_EditorClassIdentifier: 
   autoSpawnArray:
   - prefabs:
-    - {fileID: 684207032059709398, guid: f93eb207b52ea3c4ebdd09e019e6033a, type: 3}
+    - {fileID: 4425268681583790232, guid: a510c97950243f4448d60ce1f31e0bb6, type: 3}
     spawnOffset: {x: 0, y: 0}
-    targetPlayer: 1
-    bulletCount: 3
-    autoSpace: 1
+    spawnAsChild: 1
+    targetPlayer: 0
+    bulletCount: 1
+    autoSpace: 0
     bulletSpread: 0
     angleOffset: 0
     randomAngleOffset: 0
-    fireRate: 10
+    fireRate: 1
     reverseSpin: 0
     spinRate: 0
-    spinAccel: 30
-    spinMin: 0
-    spinMax: 100
-  - prefabs:
-    - {fileID: 3331719925936689788, guid: 74f461ba89788f8429c0e164d7f6d0bb, type: 3}
-    spawnOffset: {x: 0, y: 0}
-    targetPlayer: 0
-    bulletCount: 5
-    autoSpace: 0
-    bulletSpread: 10
-    angleOffset: -90
-    randomAngleOffset: 0
-    fireRate: 3
-    reverseSpin: 0
-    spinRate: 30
     spinAccel: 0
     spinMin: 0
     spinMax: 100

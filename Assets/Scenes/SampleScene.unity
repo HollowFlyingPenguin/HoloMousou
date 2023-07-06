@@ -1113,7 +1113,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Power 0 / 16
+  m_text: Power 0 / 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2033,9 +2033,10 @@ MonoBehaviour:
   bigPowerPickupValue: 8
   scorePickupValue: 100
   grazeScoreValue: 5
-  playerDamageScoreValue: 10
+  damageScoreValue: 10
   bombBreakpoint1: 0.5
   bombBreakpoint2: 0.75
+  damageBombValue: 0.001
   powerBreakpoints: 140000002d0000004600000064000000
 --- !u!4 &1707110185
 Transform:
@@ -2369,6 +2370,12 @@ MonoBehaviour:
   breakpoint1: {fileID: 1285036081}
   breakpoint2: {fileID: 797509143}
   bombFill: {fileID: 287203127}
+  bombFillImage: {fileID: 287203128}
+  bombMeterColors:
+  - {r: 0.348, g: 0.348, b: 0.348, a: 1}
+  - {r: 1, g: 0.56036687, b: 0.23137254, a: 1}
+  - {r: 0.9622642, g: 0.9622641, b: 0.40396938, a: 1}
+  - {r: 0.5052097, g: 0.9607843, b: 0.20392154, a: 1}
   powerText: {fileID: 685252453}
   highscoreText: {fileID: 1481947295}
   scoreText: {fileID: 1493258}
@@ -2620,67 +2627,6 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
---- !u!1001 &7194296624981238490
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_RootOrder
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -85.98
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -18.88
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2936455105148450589, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 3715120468343265295, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
-      propertyPath: m_Name
-      value: TestBombLaser
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 19204b958b86db74aa6752faab8bc20d, type: 3}
 --- !u!1001 &8866995981696693366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2748,7 +2694,7 @@ PrefabInstance:
     - target: {fileID: 7438367350515054193, guid: 1ff1fc1e77148f241a1c756b106f6a04, type: 3}
       propertyPath: bulletSpawnData
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 11400000, guid: e5185ef560f0ecc41bee65aef0e55b29, type: 2}
     - target: {fileID: 7438367350515054193, guid: 1ff1fc1e77148f241a1c756b106f6a04, type: 3}
       propertyPath: pickupSpawnData
       value: 
