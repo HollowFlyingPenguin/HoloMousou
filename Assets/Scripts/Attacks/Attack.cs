@@ -12,17 +12,20 @@ public class Attack : MonoBehaviour
         {
             int hitLayer = collision.gameObject.layer;
             ObjectType objectType = controller.GetObjectType();
-            if (hitLayer == LayerMask.NameToLayer("GrazeHurtbox") && objectType.Equals(ObjectType.Bullet) && !controller.GetGrazed())
+            if (hitLayer == LayerMask.NameToLayer("GrazeHurtbox"))
             {
-                GameManager.Instance.Graze();
-                controller.SetGrazed(true);
+                if (objectType.Equals(ObjectType.Bullet) && !controller.GetGrazed())
+                {
+                    GameManager.Instance.Graze();
+                    controller.SetGrazed(true);
+                }
             }
-            else
+            else if (hitLayer == LayerMask.NameToLayer("EnemyHurtbox") || hitLayer ==  LayerMask.NameToLayer("PlayerHurtbox"))
             {
                 OnHit(hitChara);
                 if (controller.GetDestroyOnAttack())
                 {
-                    ObjectPoolManager.Instance.ReturnObjectToPool(controller);
+                    MovementPoolManager.Instance.ReturnObjectToPool(controller);
                 }
             }
         }

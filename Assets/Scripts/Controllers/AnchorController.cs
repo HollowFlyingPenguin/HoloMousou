@@ -29,9 +29,10 @@ public class AnchorController : MovementController
 
     protected void SetChain()
     {
-        if (spawnOrigin)
+        var parent = transform.parent;
+        if (parent)
         {
-            float distance = (spawnOrigin.position - transform.position).magnitude;
+            float distance = Vector3.Distance(parent.position, transform.position) + 0.15f;
             chainSprite.transform.localPosition = new Vector2(0, distance / 2);
             chainSprite.size = new Vector2(chainSprite.size.x, distance + heightOffset);
         }

@@ -27,6 +27,7 @@ public class MovementController : MonoBehaviour
     [SerializeField] private List<TimedEvent> timedEvents;
     [SerializeField] protected Vector2 movementDirection = new(0, 0);
 
+    protected SpriteRenderer sprite;
     protected SpriteAnim spriteAnim;
     protected const float BoundCheckFreq = 0.5f, BulletBoundCheckOffset = 1, EnemyBoundCheckOffset = 1, TrackPlayerBoundOffset = 0.5f, PickupBoundCheckOffset = 0.5f;
     protected float speed = 0, boundCheckTimer = 0;
@@ -35,11 +36,12 @@ public class MovementController : MonoBehaviour
 
     protected virtual void Awake()
     {
+        spriteAnim = GetComponent<SpriteAnim>();
+        sprite = GetComponent<SpriteRenderer>();
     }
 
     protected virtual void Start()
     {
-        spriteAnim = GetComponent<SpriteAnim>();
     }
 
     protected virtual void Update()
@@ -111,21 +113,21 @@ public class MovementController : MonoBehaviour
             case ObjectType.Bullet:
                 if (!UIManager.Instance.CheckInGameBounds(transform.position, BulletBoundCheckOffset))
                 {
-                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                    MovementPoolManager.Instance.ReturnObjectToPool(this);
                 }
                 break;
 
             case ObjectType.Enemy:
                 if (!UIManager.Instance.CheckInGameBounds(transform.position, EnemyBoundCheckOffset))
                 {
-                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                    MovementPoolManager.Instance.ReturnObjectToPool(this);
                 }
                 break;
 
             case ObjectType.Pickup:
                 if (transform.position.y < UIManager.Instance.GetMinGameY() - PickupBoundCheckOffset)
                 {
-                    ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                    MovementPoolManager.Instance.ReturnObjectToPool(this);
                 }
                 break;
         }
@@ -138,7 +140,7 @@ public class MovementController : MonoBehaviour
             movementDirection = movementDirection.normalized;
             if (playerTrackTurnSpeed != 0 && objectType == ObjectType.Bullet && !UIManager.Instance.CheckInGameBounds(transform.position, TrackPlayerBoundOffset))
             {
-                ObjectPoolManager.Instance.ReturnObjectToPool(this);
+                MovementPoolManager.Instance.ReturnObjectToPool(this);
             }
             var velocity = movementDirection * speed;
             gameObject.transform.position += new Vector3(velocity.x, velocity.y, 0) * Time.deltaTime;
@@ -161,7 +163,7 @@ public class MovementController : MonoBehaviour
 
     public virtual void ReturnToPool()
     {
-        ObjectPoolManager.Instance.ReturnObjectToPool(this);
+        MovementPoolManager.Instance.ReturnObjectToPool(this);
     }
 
     public virtual void SetMovementDirection(Vector2 target)

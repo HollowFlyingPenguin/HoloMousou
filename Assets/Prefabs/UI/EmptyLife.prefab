@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3772815464005683515
+--- !u!1 &8654591409593010801
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,27 +8,27 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5597609352291779270}
-  - component: {fileID: 5758096775702287667}
-  - component: {fileID: 6675081612394642203}
+  - component: {fileID: 5073003822297258621}
+  - component: {fileID: 5291494577036350107}
+  - component: {fileID: 1044266171015153344}
   m_Layer: 5
-  m_Name: LifeImage
+  m_Name: EmptyLife
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &5597609352291779270
+--- !u!224 &5073003822297258621
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3772815464005683515}
+  m_GameObject: {fileID: 8654591409593010801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: -1
@@ -38,21 +38,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 46.2, y: 50.4}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &5758096775702287667
+--- !u!222 &5291494577036350107
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3772815464005683515}
+  m_GameObject: {fileID: 8654591409593010801}
   m_CullTransparentMesh: 1
---- !u!114 &6675081612394642203
+--- !u!114 &1044266171015153344
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3772815464005683515}
+  m_GameObject: {fileID: 8654591409593010801}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 502826b92bf48f448b270a423af5d4c2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6b1c2e0952cdf7e46a79d8476a91374e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

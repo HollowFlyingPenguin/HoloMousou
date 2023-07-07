@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -10,9 +12,16 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform breakpoint1, breakpoint2, bombFill;
     [SerializeField] private Image bombFillImage;
     [SerializeField] private Color[] bombMeterColors;
+
+    [SerializeField] private RectTransform lifeParent;
+    [SerializeField] private Image lifeImage;
+    [SerializeField] private RectTransform emptyLifeParent;
+    [SerializeField] private Image emptyLifeImage;
+
     [SerializeField] private TMP_Text powerText, highscoreText, scoreText;
     private float minGameX, maxGameX, minGameY, maxGameY;
     private float minBombY, maxBombY, bombHeight, bombX;
+    private List<Image> lifeList = new List<Image>();
 
     private static UIManager _instance;
 
@@ -55,6 +64,7 @@ public class UIManager : MonoBehaviour
     {
         SetAreaData();
         SetBombData();
+        SetLifeData();
     }
 
     public void GetGameCorners()
@@ -115,6 +125,47 @@ public class UIManager : MonoBehaviour
         rect.height = percent * bombHeight;
         bombFill.sizeDelta = new Vector2(rect.width, rect.height);
         bombFillImage.color = bombMeterColors[bombStage];
+    }
+
+    private void SetLifeData()
+    {
+        for (int i = 0; i < GameManager.Instance.StartingLives - 1; i++)
+        {
+            AddLife();
+        }
+        for (int i = 0; i < GameManager.Instance.MaxLives - 1; i++)
+        {
+            AddEmptyLife();
+        }
+    }
+
+    private void AddLife()
+    {
+        Image image = Instantiate(lifeImage, lifeParent);
+        lifeList.Add(image);
+    }
+
+    private void AddEmptyLife()
+    {
+        Instantiate(emptyLifeImage, emptyLifeParent);
+    }
+
+    public void GainLife()
+    {
+        if (lifeList.Count < GameManager.Instance.MaxLives)
+        {
+            AddLife();
+        }
+    }
+
+    public void LoseLife()
+    {
+        if (lifeList.Count > 0)
+        {
+            Image image = lifeList[lifeList.Count - 1];
+            lifeList.RemoveAt(lifeList.Count - 1);
+            Destroy(image.gameObject);
+        }
     }
 
     public bool CheckInGameBounds(Vector2 pos, float offset)

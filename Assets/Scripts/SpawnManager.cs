@@ -58,13 +58,13 @@ public class SpawnManager : MonoBehaviour
             switch (pickupSpawnData)
             {
                 case var data when data.powerCount == 1 && data.scoreCount == 0 && data.bigPowerCount == 0:
-                    obj = ObjectPoolManager.Instance.InitializeObject(powerPrefab);
+                    obj = MovementPoolManager.Instance.InitializeObject(powerPrefab);
                     obj.ResetValues();
                     obj.transform.position = centerPos;
                     return;
 
                 case var data when data.powerCount == 0 && data.scoreCount == 1 && data.bigPowerCount == 0:
-                    obj = ObjectPoolManager.Instance.InitializeObject(scorePrefab);
+                    obj = MovementPoolManager.Instance.InitializeObject(scorePrefab);
                     obj.ResetValues();
                     obj.transform.position = centerPos;
                     return;
@@ -83,18 +83,16 @@ public class SpawnManager : MonoBehaviour
         if (pickupSpawnData.lifeCount == 1)
         {
             MovementController obj;
-            obj = ObjectPoolManager.Instance.InitializeObject(lifePrefab);
+            obj = MovementPoolManager.Instance.InitializeObject(lifePrefab);
             obj.ResetValues();
-            obj.gameObject.SetActive(true);
             obj.transform.position = centerPos;
             lifeCount--;
         }
         else if (pickupSpawnData.bigPowerCount == 1)
         {
             MovementController obj;
-            obj = ObjectPoolManager.Instance.InitializeObject(bigPowerPrefab);
+            obj = MovementPoolManager.Instance.InitializeObject(bigPowerPrefab);
             obj.ResetValues();
-            obj.gameObject.SetActive(true);
             obj.transform.position = centerPos;
             bigPowerCount--;
         }
@@ -128,13 +126,12 @@ public class SpawnManager : MonoBehaviour
                 lifeCount--;
             }
             remainingCount--;
-            MovementController controller = ObjectPoolManager.Instance.InitializeObject(prefab);
+            MovementController controller = MovementPoolManager.Instance.InitializeObject(prefab);
             controller.ResetValues();
 
             float angle = Mathf.Rad2Deg * (startAngle + i * angleStep);
             float distance = Random.Range(minPickupDistance, maxPickupDistance);
             controller.transform.position = centerPos + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * distance;
-            controller.gameObject.SetActive(true);
         }
     }
 }

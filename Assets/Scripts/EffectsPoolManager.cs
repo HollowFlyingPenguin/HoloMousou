@@ -1,19 +1,19 @@
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
-public class ObjectPoolManager : MonoBehaviour
+public class EffectsPoolManager : MonoBehaviour
 {
-    private Dictionary<string, Queue<MovementController>> objectPools = new Dictionary<string, Queue<MovementController>>();
-    private static ObjectPoolManager _instance;
+    private Dictionary<string, Queue<GameObject>> objectPools = new Dictionary<string, Queue<GameObject>>();
+    private static EffectsPoolManager _instance;
 
-    public static ObjectPoolManager Instance //Singleton Stuff
+    public static EffectsPoolManager Instance //Singleton Stuff
     {
         get
         {
             if (_instance == null)
             {
-                Debug.Log("ObjectPoolManager is Null");
+                Debug.Log("EffectsPoolManager is Null");
             }
             return _instance;
         }
@@ -24,16 +24,16 @@ public class ObjectPoolManager : MonoBehaviour
         _instance = this;
     }
 
-    private void CreateObjectPool(MovementController prefab)
+    private void CreateObjectPool(GameObject prefab)
     {
         string poolName = prefab.name;
         if (!objectPools.ContainsKey(poolName))
         {
-            objectPools[poolName] = new Queue<MovementController>();
+            objectPools[poolName] = new Queue<GameObject>();
         }
     }
 
-    public MovementController InitializeObject(MovementController prefab)
+    public GameObject InitializeObject(GameObject prefab)
     {
         string poolName = prefab.name;
         if (!objectPools.ContainsKey(poolName))
@@ -42,18 +42,18 @@ public class ObjectPoolManager : MonoBehaviour
         }
         if (objectPools[poolName].Count > 0)
         {
-            MovementController obj = objectPools[poolName].Dequeue();
+            GameObject obj = objectPools[poolName].Dequeue();
             return obj;
         }
         else
         {
-            MovementController newObj = Instantiate(prefab, transform);
+            GameObject newObj = Instantiate(prefab, transform);
             newObj.name = poolName;
             return newObj;
         }
     }
 
-    public void ReturnObjectToPool(MovementController obj)
+    public void ReturnObjectToPool(GameObject obj)
     {
         string poolName = obj.name;
         if (!objectPools.ContainsKey(poolName))
@@ -62,7 +62,7 @@ public class ObjectPoolManager : MonoBehaviour
         }
         if (objectPools.ContainsKey(poolName))
         {
-            obj.gameObject.SetActive(false);
+            obj.SetActive(false);
             objectPools[poolName].Enqueue(obj);
         }
     }

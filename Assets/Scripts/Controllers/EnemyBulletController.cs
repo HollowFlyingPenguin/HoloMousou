@@ -9,7 +9,7 @@ public class EnemyBulletController : MovementController
     /// </summary>
     public void Dispel()
     {
-        Debug.Log("dispel");
-        ObjectPoolManager.Instance.ReturnObjectToPool(this);
+        GameManager.Instance.SpawnConvertedScore(transform.position);
+        MovementPoolManager.Instance.ReturnObjectToPool(this);
     }
 }

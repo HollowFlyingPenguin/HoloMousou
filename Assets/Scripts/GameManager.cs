@@ -4,10 +4,24 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
     protected int power = 0, powerStage = 0, score = 0, highscore = 0, bombStage = 0;
-    [SerializeField] protected int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 100, grazeScoreValue = 100, damageScoreValue = 10;
+    [SerializeField] protected int startingLives = 3, maxLives = 9;
     [SerializeField] protected float bombBreakpoint1 = 0.5f, bombBreakpoint2 = 0.75f, damageBombValue = 0.01f;
     [SerializeField] protected int[] powerBreakpoints = new int[4];
     protected float bombMeter = 0;
+
+    [SerializeField] protected PickupController convertedScoreController;
+
+    protected static int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 500, grazeScoreValue = 100, damageScoreValue = 10, convertedScorePickupValue = 100;
+
+    public int StartingLives
+    {
+        get { return startingLives; }
+    }
+
+    public int MaxLives
+    {
+        get { return maxLives; }
+    }
 
     public float BombBreakPoint1
     {
@@ -18,11 +32,6 @@ public class GameManager : MonoBehaviour
     {
         get { return bombBreakpoint2; }
     }
-
-    //public delegate void EnableAutoPickup();
-    //public event EnableAutoPickup OnEnableAutoPickup;
-    //public delegate void DisableAutoPickup();
-    //public event DisableAutoPickup OnDisableAutoPickup;
 
     public event UnityAction EnableAutoPickup;
 
@@ -77,6 +86,15 @@ public class GameManager : MonoBehaviour
         {
             UpdateBomb(0.2f);
         }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            PickupLife();
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            Vector2 pos = UIManager.Instance.GetGameCenter();
+            EffectsManager.Instance.SpawnScoreText(pos, 1000);
+        }
     }
 
     public void SetPlayer(Player player)
@@ -98,6 +116,13 @@ public class GameManager : MonoBehaviour
         character.Hurt(damage);
     }
 
+    public void SpawnConvertedScore(Vector2 pos)
+    {
+        MovementController scoreController = MovementPoolManager.Instance.InitializeObject(convertedScoreController);
+        scoreController.ResetValues();
+        scoreController.transform.position = pos;
+    }
+
     public void PickupPower()
     {
         UpdatePower(powerPickupValue);
@@ -117,6 +142,17 @@ public class GameManager : MonoBehaviour
     {
         player.GainLife();
     }
+    public void PickupConvertedScore()
+    {
+        UpdateScore(convertedScorePickupValue);
+    }
+
+    public void GainEnemyScore(int amount)
+    {
+        UpdateScore(amount);
+        // add bomb value
+    }
+
     public Vector2 GetPlayerPosition()
     {
         return player.transform.position;

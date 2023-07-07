@@ -87,7 +87,7 @@ public class Character : MovementController
             MovementController prefab = data.prefabs[bulletPrefabIndex % arrayLength];
             bulletPrefabIndex++;
 
-            MovementController bullet = ObjectPoolManager.Instance.InitializeObject(prefab);
+            MovementController bullet = MovementPoolManager.Instance.InitializeObject(prefab);
             if (data.spawnAsChild)
             {
                 bullet.transform.parent = transform;
@@ -125,7 +125,6 @@ public class Character : MovementController
             }
 
             bullet.SetMovementDirection(angle);
-            obj.SetActive(true);
         }
     }
 
@@ -142,6 +141,6 @@ public class Character : MovementController
         {
             SpawnManager.Instance.SpawnPickup(transform.position, pickupSpawnData);
         }
-        ObjectPoolManager.Instance.ReturnObjectToPool(this);
+        MovementPoolManager.Instance.ReturnObjectToPool(this);
     }
 }

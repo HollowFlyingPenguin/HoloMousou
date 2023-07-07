@@ -10,10 +10,14 @@ public class Player : Character
     [SerializeField] protected float pointOfCollectionRatio = 0.4f;
     [SerializeField] protected float slowPercent = 0.3f, edgeBoundOffsetX = 0.5f, edgeBoundOffsetY = 0.5f;
     [SerializeField] protected float recoverTime = 1;
-    protected float recoverTimer = 0;
     protected PlayerInput input;
     protected Vector2 primaryInput;
     protected static float StickDiagonalZone = 0.3f;
+
+    // Hit Effect stuff, static to apply to all player prefabs
+    protected static float RecoverFlashSpeed = 5f;
+    private Color originalColor;
+    private bool isFlashing = false;
 
     protected override void Awake()
     {
@@ -23,6 +27,8 @@ public class Player : Character
     protected override void Start()
     {
         base.Start();
+        health = GameManager.Instance.StartingLives;
+        originalColor = sprite.color;
     }
 
     protected override void FixedUpdate()
@@ -36,25 +42,8 @@ public class Player : Character
         GetControllerInput();
         GetKeyboardInput();
         base.Update();
-
-        canShoot = input.actions["Shoot"].IsPressed();
-        bool shotPressed = input.actions["Shoot"].WasPressedThisFrame();
-        if (shotPressed)
-        {
-            for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
-            {
-                CheckShotTimer(i);
-            }
-        }
-        bool bombPressed = input.actions["Bomb"].WasPressedThisFrame();
-        if (bombPressed)
-        {
-            int bombStage = GameManager.Instance.GetBombStage();
-            if (bombStage > 0)
-            {
-                Shoot(bombs[bombStage - 1].autoSpawnArray[0]);
-            }
-        }
+        AttackInputs();
+        RecoverFlash();
     }
 
     protected virtual void GetControllerInput()
@@ -126,6 +115,42 @@ public class Player : Character
         movementDirection = inputDir;
     }
 
+    protected virtual void AttackInputs()
+    {
+        canShoot = input.actions["Shoot"].IsPressed();
+        bool shotPressed = input.actions["Shoot"].WasPressedThisFrame();
+        if (shotPressed)
+        {
+            for (int i = 0; i < bulletSpawnData.autoSpawnArray.Length; i++)
+            {
+                CheckShotTimer(i);
+            }
+        }
+        bool bombPressed = input.actions["Bomb"].WasPressedThisFrame();
+        if (bombPressed)
+        {
+            int bombStage = GameManager.Instance.GetBombStage();
+            if (bombStage > 0)
+            {
+                Shoot(bombs[bombStage - 1].autoSpawnArray[0]);
+            }
+        }
+    }
+
+    protected virtual void RecoverFlash()
+    {
+        if (isFlashing)
+        {
+            float flashAlpha = Mathf.PingPong(Time.time * RecoverFlashSpeed, 1f);
+            Color flashColor = new(originalColor.r, originalColor.g, originalColor.b, flashAlpha);
+            sprite.color = flashColor;
+        }
+        else
+        {
+            sprite.color = originalColor;
+        }
+    }
+
     public override void Hurt(float damage)
     {
         base.Hurt(damage);
@@ -134,6 +159,7 @@ public class Player : Character
             transform.position = SpawnManager.Instance.GetPlayerSpawnPos();
             GameManager.Instance.ResetPickupMovement();
             StartCoroutine(InvincibilityTimer());
+            UIManager.Instance.LoseLife();
         }
     }
 
@@ -145,8 +171,10 @@ public class Player : Character
     IEnumerator InvincibilityTimer()
     {
         damageable = false;
+        isFlashing = true;
         yield return new WaitForSeconds(recoverTime);
         damageable = true;
+        isFlashing = false;
     }
 
     protected override void Move()
@@ -185,6 +213,8 @@ public class Player : Character
     public virtual void GainLife()
     {
         health += 1;
+        Mathf.Clamp(health, 0, GameManager.Instance.MaxLives);
+        UIManager.Instance.GainLife();
     }
 
     public virtual void SetPowerUpgrade(int stage)

@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 8165321884700148793}
   - component: {fileID: 7499606313929539534}
   - component: {fileID: -6706805352241659138}
-  - component: {fileID: 8627045818119964178}
-  - component: {fileID: 6505196924032238308}
+  - component: {fileID: -7608738825740981866}
+  - component: {fileID: 508688536034451652}
   m_Layer: 11
-  m_Name: BigPowerPickup
+  m_Name: ConvertedScorePickup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5771656011058597323}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -93.6439, y: -9.9761, z: 0}
-  m_LocalScale: {x: 0.8383414, y: 0.8383414, z: 0.8383414}
+  m_LocalScale: {x: 0.31593242, y: 0.31593242, z: 0.31593242}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 5
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0.26898736, b: 0.25, a: 1}
+  m_Color: {r: 0.908, g: 0.9229319, b: 1, a: 0.50980395}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5c6de2bb428bf42845d67d473b34ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 2
---- !u!114 &8627045818119964178
+  type: 1
+--- !u!114 &-7608738825740981866
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   objectType: 4
   active: 1
   destroyOnAttack: 1
-  baseSpeed: 2
+  baseSpeed: 0
   speedMax: 4
   accel: {x: 0, y: -5}
   faceMoveDir: 0
@@ -124,7 +124,8 @@ MonoBehaviour:
   playerTrackTurnSpeed: 0
   timedEvents: []
   movementDirection: {x: 0, y: 0}
---- !u!61 &6505196924032238308
+  alwaysAutoPickup: 1
+--- !u!61 &508688536034451652
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

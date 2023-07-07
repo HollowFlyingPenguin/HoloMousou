@@ -7,7 +7,8 @@ public enum PickupType
     Power,
     Score,
     BigPower,
-    Life
+    Life,
+    ConvertedScore
 }
 
 public class Pickup : MonoBehaviour
@@ -15,10 +16,11 @@ public class Pickup : MonoBehaviour
     [SerializeField] PickupType type = PickupType.Power;
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        MovementController controller = GetComponentInParent<MovementController>();
-        if (controller)
+        int hitLayer = collision.gameObject.layer;
+        PickupController controller = GetComponentInParent<PickupController>();
+        if (hitLayer == LayerMask.NameToLayer("PlayerHurtbox"))
         {
-            ObjectPoolManager.Instance.ReturnObjectToPool(controller);
+            MovementPoolManager.Instance.ReturnObjectToPool(controller);
             switch (type)
             {
                 case PickupType.Power:
@@ -33,9 +35,16 @@ public class Pickup : MonoBehaviour
                 case PickupType.Life:
                     GameManager.Instance.PickupLife();
                     break;
+                case PickupType.ConvertedScore:
+                    GameManager.Instance.PickupConvertedScore();
+                    break;
                 default:
                     break;
             }
+        }
+        else if (hitLayer == LayerMask.NameToLayer("AutoCollectionHurtbox"))
+        {
+            controller.EnableAutoPickup();
         }
     }
 }
