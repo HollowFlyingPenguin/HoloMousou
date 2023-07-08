@@ -27,7 +27,7 @@ public class Pickup : MonoBehaviour
                     GameManager.Instance.PickupPower();
                     break;
                 case PickupType.Score:
-                    GameManager.Instance.PickupScore();
+                    GameManager.Instance.PickupScore(transform.position);
                     break;
                 case PickupType.BigPower:
                     GameManager.Instance.PickupBigPower();

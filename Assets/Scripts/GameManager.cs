@@ -10,8 +10,9 @@ public class GameManager : MonoBehaviour
     protected float bombMeter = 0;
 
     [SerializeField] protected PickupController convertedScoreController;
-
     protected static int powerPickupValue = 1, bigPowerPickupValue = 8, scorePickupValue = 500, grazeScoreValue = 100, damageScoreValue = 10, convertedScorePickupValue = 100;
+
+    [SerializeField] protected MovementController test;
 
     public int StartingLives
     {
@@ -133,9 +134,10 @@ public class GameManager : MonoBehaviour
         UpdatePower(bigPowerPickupValue);
     }
 
-    public void PickupScore()
+    public void PickupScore(Vector2 pos)
     {
         UpdateScore(scorePickupValue);
+        EffectsManager.Instance.SpawnScoreText(pos, scorePickupValue);
     }
 
     public void PickupLife()

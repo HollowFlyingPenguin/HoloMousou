@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class EffectsManager : MonoBehaviour
@@ -28,17 +27,12 @@ public class EffectsManager : MonoBehaviour
         _instance = this;
     }
 
-    public void Test()
-    {
-        Debug.Log("test");
-    }
-
     public void SpawnScoreText(Vector2 pos, int amount)
     {
         GameObject obj = EffectsPoolManager.Instance.InitializeObject(scoreGetText);
-        //obj.transform.position = pos;
-        obj.transform.parent.SetParent(UIEffectsParent);
-        obj.transform.position = Camera.main.WorldToScreenPoint(pos);
+        obj.transform.parent.SetParent(UIEffectsParent, false);
+        obj.transform.position = pos;
+        //obj.transform.position = Camera.main.WorldToScreenPoint(pos);
         TMP_Text text = obj.GetComponent<TMP_Text>();
         text.text = amount.ToString("N0");
     }

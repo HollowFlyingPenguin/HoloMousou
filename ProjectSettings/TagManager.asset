@@ -41,6 +41,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: UIEffects
+    uniqueID: 154777535
+    locked: 0
   - name: PlayerShots
     uniqueID: 1272242343
     locked: 0

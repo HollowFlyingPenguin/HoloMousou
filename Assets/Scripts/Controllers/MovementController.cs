@@ -11,7 +11,8 @@ public enum ObjectType
     Enemy,
     Boss,
     Player,
-    Pickup
+    Pickup,
+    Effect
 }
 
 public class MovementController : MonoBehaviour

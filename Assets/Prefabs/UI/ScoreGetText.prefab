@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8071920040716894931}
   - component: {fileID: 71306892377911098}
+  - component: {fileID: 6997105792341518949}
   - component: {fileID: 3892806653640584980}
   m_Layer: 5
   m_Name: ScoreGetText
@@ -25,7 +26,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163133265463414885}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -46,6 +47,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 163133265463414885}
   m_CullTransparentMesh: 1
+--- !u!114 &6997105792341518949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 163133265463414885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 224fe454f69c9384797b3827e1e5d2e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectType: 5
+  active: 1
+  destroyOnAttack: 1
+  baseSpeed: 1
+  speedMax: 100
+  accel: {x: 0, y: -1}
+  faceMoveDir: 0
+  initialRotation: 0
+  rotationSpeed: 0
+  playerTrackTurnSpeed: 0
+  timedEvents: []
+  movementDirection: {x: 0, y: 1}
+  fadeDuration: 1
+  baseAlpha: 0.5
 --- !u!114 &3892806653640584980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,8 +120,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 43
-  m_fontSizeBase: 43
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

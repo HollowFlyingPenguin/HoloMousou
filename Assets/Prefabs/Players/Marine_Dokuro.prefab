@@ -79,7 +79,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 2044907349
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: a63f53738053f6642866e6e995180111, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -133,7 +133,7 @@ MonoBehaviour:
   pointOfCollectionRatio: 0.4
   slowPercent: 0.5
   edgeBoundOffsetX: -0.25
-  edgeBoundOffsetY: -0.7
+  edgeBoundOffsetY: -0.2
   recoverTime: 4
 --- !u!114 &7485411105510597982
 MonoBehaviour:
@@ -292,7 +292,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.61110276
+  m_Radius: 0.7129473
 --- !u!1 &8904129111250563215
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +320,7 @@ Transform:
   m_GameObject: {fileID: 8904129111250563215}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.015325, y: 1.1945, z: 0.32875028}
+  m_LocalScale: {x: 1, y: 1, z: 0.32875028}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6612507488460277745}
@@ -365,7 +365,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1536734167
-  m_SortingLayer: 7
+  m_SortingLayer: 8
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 5f1b81afd0eb2914cbb8cabf227956df, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -410,9 +410,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.0022889376}
+  m_Offset: {x: 0, y: -0.0045309067}
   serializedVersion: 2
-  m_Radius: 0.037507653
+  m_Radius: 0.05619049
 --- !u!1 &9180528980913917734
 GameObject:
   m_ObjectHideFlags: 0
